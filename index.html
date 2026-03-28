@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pallet Optimizer 2.0 - Final</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f0f4f8; font-family: 'Plus Jakarta Sans', sans-serif; color: #334155; }
+        .glass-card { background: #ffffff; border-radius: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.04); }
+        
+        /* Pallet UI from Screenshot */
+        .pallet-box { width: 85px; height: 85px; border: 2px solid #545e6b; background: #e2e8f0; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
+        .pallet-fill { background-color: #0f52ba; width: 100%; transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .pallet-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; color: white; opacity: 0.9; }
+        
+        /* Efficiency Circle */
+        .circular-chart { display: block; margin: 0 auto; max-width: 100px; max-height: 100px; }
+        .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 3.8; }
+        .circle { fill: #93c5fd; stroke: #2563eb; stroke-width: 1; stroke-dasharray: 0, 100; transition: stroke-dasharray 1s ease-out; }
+        
+        /* Toggles */
+        .toggle-checkbox:checked + .toggle-label { background-color: #0f52ba; border-color: #0f52ba; }
+        .toggle-checkbox:checked + .toggle-label::after { transform: translateX(100%); border-color: white; }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex justify-center min-h-screen items-start">
+
+    <div class="w-full max-w-5xl glass-card p-8 md:p-12">
+        
+        <div class="flex justify-between items-center mb-10 border-b border-slate-100 pb-6">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center border border-dashed border-slate-300 overflow-hidden">
+                    <span class="text-[10px] text-slate-400 font-bold text-center leading-tight px-1">LOGO CÔNG TY</span>
+                    </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Pallet Optimizer 2.0</h1>
+                    <p class="text-sm text-slate-500 font-medium">Hệ thống tính toán đóng gói tối ưu</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-10 relative">
+            <div class="absolute top-0 right-0 flex gap-8 text-right z-10">
+                <div>
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Pallets</div>
+                    <div id="res-total-pallets" class="text-2xl font-black text-slate-800">0</div>
+                </div>
+                <div>
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Efficiency</div>
+                    <div id="res-efficiency-text" class="text-2xl font-black text-slate-800">0%</div>
+                </div>
+                <div>
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Packing List</div>
+                    <div id="res-packing-list" class="text-lg font-bold text-slate-800 whitespace-pre-line">-</div>
+                </div>
+            </div>
+
+            <h2 class="text-lg font-black text-slate-800 mb-8 uppercase tracking-widest">Loading Dock View</h2>
+            
+            <div class="bg-white rounded-2xl min-h-[250px] flex flex-col justify-between relative">
+                <div id="dock-view" class="flex flex-wrap gap-4 justify-start pt-12 pr-40">
+                    <p class="text-slate-400 italic text-sm">Nhập thông tin và chạy tối ưu để xem kết quả...</p>
+                </div>
+                
+                <div class="absolute bottom-0 right-0 flex flex-col items-center">
+                    <svg viewBox="0 0 36 36" class="circular-chart w-24 h-24 mb-2">
+                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path id="efficiency-circle" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="0, 100" />
+                    </svg>
+                    <div class="bg-white border-2 border-slate-800 rounded-full px-4 py-1 text-xs font-bold shadow-sm">
+                        <span id="res-eff-badge">0% EFF.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-slate-100 mb-8">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tên Sản Phẩm</label>
+                <select id="product-select" onchange="handleProductChange()" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-700 shadow-sm transition-all">
+                    </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nhập Số Lượng Hộp</label>
+                <input type="number" id="input-boxes" oninput="calculateFromBoxes()" placeholder="Ví dụ: 105" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
+                <div id="box-breakdown" class="mt-2 text-[12px] font-semibold text-blue-600 h-4"></div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Số Lượng Thùng (Tổng)</label>
+                <input type="number" id="input-cartons" oninput="clearBoxesOnCartonInput()" placeholder="0" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
+                <div class="mt-2 text-[11px] font-medium text-slate-400">Có thể nhập trực tiếp số thùng</div>
+            </div>
+        </div>
+
+        <div class="mb-10">
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Cấu hình Pallet có sẵn</h3>
+            <div id="pallet-toggles-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                </div>
+        </div>
+
+        <button onclick="runOptimization()" class="w-full bg-slate-200 hover:bg-[#0f52ba] hover:text-white text-slate-600 font-bold py-5 rounded-2xl transition-all duration-300 uppercase tracking-widest text-sm shadow-sm hover:shadow-xl">
+            Run Optimization
+        </button>
+
+    </div>
+
+    <script>
+        // Dữ liệu mẫu (Bạn có thể thêm bớt tùy ý)
+        const DATABASE = [
+            { id: 'SP1', name: "Sản phẩm A", boxesPerCarton: 100, caps: { PL1: 40, PL2: 30, PL3: 20, PL4: 15, PL5: 10 } },
+            { id: 'SP2', name: "Sản phẩm B", boxesPerCarton: 50,  caps: { PL1: 50, PL2: 40, PL3: 25, PL4: 20, PL5: 12 } },
+            { id: 'SP3', name: "Sản phẩm C", boxesPerCarton: 120, caps: { PL1: 35, PL2: 25, PL3: 15, PL4: 10, PL5: 8 } }
+        ];
+
+        const PL_TYPES = [
+            { id: 'PL1', name: 'Pallet Rất Lớn' },
+            { id: 'PL2', name: 'Pallet Lớn' },
+            { id: 'PL3', name: 'Pallet Vừa' },
+            { id: 'PL4', name: 'Pallet Nhỏ' },
+            { id: 'PL5', name: 'Pallet Rất Nhỏ' }
+        ];
+
+        function init() {
+            const select = document.getElementById('product-select');
+            DATABASE.forEach(p => {
+                select.innerHTML += `<option value="${p.id}">${p.name} (Quy cách: ${p.boxesPerCarton} hộp/thùng)</option>`;
+            });
+            renderToggles();
+        }
+
+        function handleProductChange() {
+            renderToggles();
+            calculateFromBoxes(); // Tính lại số lượng nếu đổi sản phẩm
+        }
+
+        // Tạo giao diện danh sách Toggles
+        function renderToggles() {
+            const container = document.getElementById('pallet-toggles-container');
+            const productId = document.getElementById('product-select').value;
+            const product = DATABASE.find(p => p.id === productId);
+            
+            container.innerHTML = "";
+            PL_TYPES.forEach(pl => {
+                const capacity = product.caps[pl.id];
+                // Mặc định bật 3 loại đầu, tắt 2 loại sau để test
+                const isChecked = ['PL1', 'PL2', 'PL3'].includes(pl.id) ? 'checked' : ''; 
+                
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:border-blue-300 transition-colors">
+                        <div>
+                            <div class="font-bold text-slate-700 text-sm">${pl.id}</div>
+                            <div class="text-xs text-slate-500 mt-1">${pl.name} - <span class="font-bold text-blue-600">${capacity} Thùng</span></div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="toggle-${pl.id}" class="toggle-checkbox sr-only peer" ${isChecked}>
+                            <div class="toggle-label w-11 h-6 bg-slate-200 border-2 border-slate-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-300 transition-all after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                        </label>
+                    </div>
+                `;
+            });
+        }
+
+        // Xử lý Logic: Nhập Hộp -> Tính Thùng
+        function calculateFromBoxes() {
+            const productId = document.getElementById('product-select').value;
+            const product = DATABASE.find(p => p.id === productId);
+            const boxesStr = document.getElementById('input-boxes').value;
+            
+            if (!boxesStr || boxesStr.trim() === "") {
+                document.getElementById('input-cartons').value = "";
+                document.getElementById('box-breakdown').innerText = "";
+                return;
+            }
+
+            const boxes = parseInt(boxesStr);
+            if (boxes <= 0) return;
+
+            const fullCartons = Math.floor(boxes / product.boxesPerCarton);
+            const remainderBoxes = boxes % product.boxesPerCarton;
+            
+            let totalCartons = fullCartons;
+            let breakdownText = "";
+
+            if (remainderBoxes === 0) {
+                breakdownText = `= ${fullCartons} thùng chẵn`;
+            } else {
+                totalCartons += 1; // Cộng thêm 1 thùng lẻ
+                breakdownText = `= ${fullCartons} thùng + 1 thùng lẻ (${remainderBoxes} hộp)`;
+            }
+
+            document.getElementById('input-cartons').value = totalCartons;
+            document.getElementById('box-breakdown').innerText = breakdownText;
+        }
+
+        // Nếu người dùng chủ động gõ vào ô Thùng, xóa text diễn giải ở ô Hộp
+        function clearBoxesOnCartonInput() {
+            document.getElementById('input-boxes').value = "";
+            document.getElementById('box-breakdown').innerText = "";
+        }
+
+        // THUẬT TOÁN TỐI ƯU
+        function runOptimization() {
+            const totalCartons = parseInt(document.getElementById('input-cartons').value) || 0;
+            if (totalCartons <= 0) {
+                alert("Vui lòng nhập số lượng hợp lệ!");
+                return;
+            }
+
+            const productId = document.getElementById('product-select').value;
+            const product = DATABASE.find(p => p.id === productId);
+
+            // Lấy danh sách Pallet đang BẬT và sắp xếp Sức chứa giảm dần
+            let activePallets = PL_TYPES.map(pl => {
+                return {
+                    id: pl.id,
+                    cap: product.caps[pl.id],
+                    active: document.getElementById(`toggle-${pl.id}`).checked
+                };
+            }).filter(p => p.active && p.cap > 0).sort((a, b) => b.cap - a.cap);
+
+            if (activePallets.length === 0) {
+                alert("Vui lòng BẬT ít nhất 1 loại Pallet!");
+                return;
+            }
+
+            let remaining = totalCartons;
+            let resultList = {};
+            let dockHtml = "";
+            let totalCapacityUsed = 0;
+            let totalPalletsCount = 0;
+
+            // Thuật toán Tham lam (Greedy)
+            activePallets.forEach(p => {
+                let count = Math.floor(remaining / p.cap);
+                if (count > 0) {
+                    resultList[p.id] = count;
+                    for (let i = 0; i < count; i++) {
+                        dockHtml += renderPalletBox(p.id, p.cap, p.cap);
+                        totalCapacityUsed += p.cap;
+                        totalPalletsCount++;
+                    }
+                    remaining -= count * p.cap;
+                }
+            });
+
+            // Xử lý số dư (Nếu còn dư, chọn pallet NHỎ NHẤT đang bật đủ sức chứa nó, hoặc cứ lấy cái nhỏ nhất)
+            if (remaining > 0) {
+                let smallestPallet = activePallets[activePallets.length - 1];
+                
+                resultList[smallestPallet.id] = (resultList[smallestPallet.id] || 0) + 1;
+                dockHtml += renderPalletBox(smallestPallet.id, remaining, smallestPallet.cap);
+                totalCapacityUsed += smallestPallet.cap;
+                totalPalletsCount++;
+            }
+
+            // Cập nhật giao diện Kết quả
+            document.getElementById('dock-view').innerHTML = dockHtml;
+            document.getElementById('res-total-pallets').innerText = totalPalletsCount;
+            
+            // Tính Efficiency
+            const efficiency = Math.round((totalCartons / totalCapacityUsed) * 100);
+            document.getElementById('res-efficiency-text').innerText = efficiency + "%";
+            document.getElementById('res-eff-badge').innerText = efficiency + "% EFF.";
+            
+            // Vẽ biểu đồ tròn SVG
+            const strokeDash = `${efficiency}, 100`;
+            document.getElementById('efficiency-circle').setAttribute('stroke-dasharray', strokeDash);
+
+            // Tạo Packing List Text
+            let packingText = [];
+            for (const [id, count] of Object.entries(resultList)) {
+                packingText.push(`${count}x ${id}`);
+            }
+            document.getElementById('res-packing-list').innerText = packingText.join("\n");
+        }
+
+        // Render HTML cho từng cục Pallet
+        function renderPalletBox(type, fill, max) {
+            const heightPerc = (fill / max) * 100;
+            // Icon thùng carton
+            const iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg>`;
+            
+            return `
+                <div class="flex flex-col items-start w-[85px]">
+                    <div class="pallet-box">
+                        <div class="pallet-icon">${iconSvg}</div>
+                        <div class="pallet-fill" style="height: ${heightPerc}%"></div>
+                    </div>
+                    <div class="mt-2 text-left">
+                        <div class="text-[11px] font-bold text-slate-700">${type}</div>
+                        <div class="text-[11px] text-slate-500">${fill}/${max}</div>
+                    </div>
+                </div>`;
+        }
+
+        // Khởi chạy khi load trang
+        init();
+    </script>
+</body>
+</html>
