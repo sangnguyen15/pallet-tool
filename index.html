@@ -13,20 +13,26 @@
         body { background-color: #f0f4f8; font-family: 'Plus Jakarta Sans', sans-serif; color: #334155; }
         .glass-card { background: #ffffff; border-radius: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.04); }
         
-        /* Pallet UI */
-        .pallet-box { width: 85px; height: 85px; border: 2px solid #545e6b; background: #e2e8f0; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
-        .pallet-fill { background-color: #0f52ba; width: 100%; transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* Pallet UI - Thiết kế chuyên nghiệp hơn */
+        .pallet-box { width: 90px; height: 100px; border: 2px solid #cbd5e1; background: #f8fafc; border-radius: 8px 8px 0 0; position: relative; display: flex; align-items: flex-end; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.05); border-bottom: none; margin-bottom: 2px; }
+        .pallet-fill { background: linear-gradient(to top, #2563eb, #60a5fa); width: 100%; transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.95; }
+        .pallet-base { width: 96px; height: 14px; background: #8b5a2b; border-radius: 2px; position: relative; left: -3px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); background-image: linear-gradient(90deg, #603813 0%, #8b5a2b 50%, #603813 100%); border-bottom: 2px solid #4a290c;}
         .pallet-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; color: white; opacity: 0.9; }
         
-        /* ĐÃ SỬA LỖI BIỂU ĐỒ TRÒN */
-        .circular-chart { display: block; margin: 0 auto; max-width: 100px; max-height: 100px; }
-        .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 3.8; }
-        .circle { fill: none; stroke: #2563eb; stroke-width: 3.8; stroke-linecap: round; stroke-dasharray: 0, 100; transition: stroke-dasharray 1.5s ease-out; }
+        /* Biểu đồ tròn - Thiết kế dạng Gauge Chart hiện đại */
+        .circular-chart { display: block; margin: 0 auto; max-width: 110px; max-height: 110px; transform: rotate(-90deg); }
+        .circle-bg { fill: none; stroke: #f1f5f9; stroke-width: 4; }
+        .circle { fill: none; stroke: #10b981; stroke-width: 4; stroke-linecap: round; transition: stroke-dasharray 1s cubic-bezier(0.4, 0, 0.2, 1); }
         
         /* Toggles & Disabled state */
         .toggle-checkbox:checked:not(:disabled) + .toggle-label { background-color: #0f52ba; border-color: #0f52ba; }
         .toggle-checkbox:checked:not(:disabled) + .toggle-label::after { transform: translateX(100%); border-color: white; }
         .toggle-checkbox:disabled + .toggle-label { cursor: not-allowed; opacity: 0.4; }
+
+        /* Scrollbar cho danh sách tìm kiếm */
+        #product-dropdown::-webkit-scrollbar { width: 6px; }
+        #product-dropdown::-webkit-scrollbar-track { background: #f1f1f1; }
+        #product-dropdown::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body class="p-4 md:p-8 flex justify-center min-h-screen items-start">
@@ -35,12 +41,12 @@
         
         <div class="flex justify-between items-center mb-10 border-b border-slate-100 pb-6">
             <div class="flex items-center gap-4">
-                <div class="w-200 h-100 rounded-xl flex items-center justify-center overflow-hidden">
-    <img src="https://nafarma.com/wp-content/uploads/2024/12/LOGO-TAGLINE-longer-ver-01.png" alt="Logo" class="w-full h-full object-contain">
-</div>
+                <div class="w-50 h-25 rounded-xl flex items-center justify-center overflow-hidden">
+                    <img src="https://nafarma.com/wp-content/uploads/2024/12/LOGO-TAGLINE-longer-ver-01.png" alt="Logo" class="w-full h-full object-contain">
+                </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Tối Ưu Hóa Pallet </h1>
-                    <p class="text-sm text-slate-500 font-medium">Công Cụ tính toán pallet </p>
+                    <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Tối Ưu Hóa Pallet</h1>
+                    <p class="text-sm text-slate-500 font-medium">Công Cụ tính toán pallet</p>
                 </div>
             </div>
         </div>
@@ -48,33 +54,36 @@
         <div class="mb-10 relative">
             <div class="absolute top-0 right-0 flex gap-8 text-right z-10">
                 <div>
-                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Pallets</div>
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tổng Pallets</div>
                     <div id="res-total-pallets" class="text-2xl font-black text-slate-800">0</div>
                 </div>
                 <div>
-                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Efficiency</div>
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hiệu Quả</div>
                     <div id="res-efficiency-text" class="text-2xl font-black text-slate-800">0%</div>
                 </div>
                 <div>
-                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Packing List</div>
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Danh Sách Pallet</div>
                     <div id="res-packing-list" class="text-lg font-bold text-slate-800 whitespace-pre-line">-</div>
                 </div>
             </div>
 
-            <h2 class="text-lg font-black text-slate-800 mb-8 uppercase tracking-widest">Loading Dock View</h2>
+            <h2 class="text-lg font-black text-slate-800 mb-8 uppercase tracking-widest">Sơ Đồ Theo Dõi Pallet</h2>
             
-            <div class="bg-white rounded-2xl min-h-[250px] flex flex-col justify-between relative">
-                <div id="dock-view" class="flex flex-wrap gap-4 justify-start pt-12 pr-40">
+            <div class="bg-white rounded-2xl min-h-[300px] flex flex-col justify-between relative border border-slate-50 shadow-inner p-6">
+                <div id="dock-view" class="flex flex-wrap gap-6 justify-start pt-12 pr-44">
                     <p class="text-slate-400 italic text-sm">Nhập thông tin và chạy tối ưu để xem kết quả...</p>
                 </div>
                 
-                <div class="absolute bottom-0 right-0 flex flex-col items-center">
-                    <svg viewBox="0 0 36 36" class="circular-chart w-24 h-24 mb-2">
-                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path id="efficiency-circle" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="0, 100" />
-                    </svg>
-                    <div class="bg-white border-2 border-slate-800 rounded-full px-4 py-1 text-xs font-bold shadow-sm">
-                        <span id="res-eff-badge">0% EFF.</span>
+                <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-xl border border-slate-100 flex flex-col items-center">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hiệu suất Pallet</div>
+                    <div class="relative flex items-center justify-center w-24 h-24">
+                        <svg viewBox="0 0 36 36" class="circular-chart absolute inset-0 w-full h-full">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="efficiency-circle" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="0, 100" />
+                        </svg>
+                        <div class="absolute flex flex-col items-center">
+                            <span id="res-eff-badge" class="text-xl font-black text-slate-800">0%</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -83,18 +92,20 @@
         <hr class="border-slate-100 mb-8">
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tên Sản Phẩm</label>
-                <select id="product-select" onchange="handleProductChange()" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-700 shadow-sm transition-all">
-                </select>
+            <div class="relative">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tên Sản Phẩm (Tìm kiếm)</label>
+                <input type="text" id="product-search" placeholder="Gõ tên để tìm..." class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-700 shadow-sm transition-all" autocomplete="off" onfocus="showDropdown()" oninput="filterProducts()">
+                <input type="hidden" id="product-select">
+                <ul id="product-dropdown" class="absolute z-50 w-full bg-white border border-slate-200 rounded-xl shadow-2xl mt-1 max-h-60 overflow-y-auto hidden divide-y divide-slate-100">
+                </ul>
             </div>
             <div>
                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nhập Số Lượng Hộp</label>
-                <input type="number" id="input-boxes" oninput="calculateFromBoxes()" placeholder="Ví dụ: 105" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
+                <input type="number" id="input-boxes" oninput="calculateFromBoxes()" placeholder="Ví dụ: 2000" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
                 <div id="box-breakdown" class="mt-2 text-[12px] font-semibold text-blue-600 h-4"></div>
             </div>
             <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Số Lượng Thùng (Tổng)</label>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nhập Số Lượng Thùng</label>
                 <input type="number" id="input-cartons" oninput="clearBoxesOnCartonInput()" placeholder="0" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
                 <div class="mt-2 text-[11px] font-medium text-slate-400">Có thể nhập trực tiếp số thùng</div>
             </div>
@@ -113,58 +124,56 @@
     </div>
 
     <script>
-        // ĐÃ CẬP NHẬT TÊN PALLET MỚI CHO DATABASE
         const DATABASE = [
-    { id: 'SP1', name: "Bamifen", boxesPerCarton: 680, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP2', name: "Calcium", boxesPerCarton: 225, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP3', name: "CandeKern 8", boxesPerCarton: 72, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
-    { id: 'SP4', name: "Codalgin Forte", boxesPerCarton: 192, caps: { 'Pallet L': 54, 'Pallet N': 27, 'Pallet T1': 35, 'Pallet T2': 35, 'Pallet 1A': 54 } },
-    { id: 'SP5', name: "Colchicina", boxesPerCarton: 100, caps: { 'Pallet L': 100, 'Pallet N': 48, 'Pallet T1': 45, 'Pallet T2': 60, 'Pallet 1A': 100 } },
-    { id: 'SP6', name: "DogmaKern", boxesPerCarton: 192, caps: { 'Pallet L': 84, 'Pallet N': 25, 'Pallet T1': 50, 'Pallet T2': 34, 'Pallet 1A': 80 } },
-    { id: 'SP7', name: "Folihem", boxesPerCarton: 175, caps: { 'Pallet L': 55, 'Pallet N': 25, 'Pallet 1A': 55 } },
-    { id: 'SP8', name: "Lovarem", boxesPerCarton: 760, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP9', name: "Oprymea0.26", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP10', name: "Oprymea0.52", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP11', name: "Remebentin 100", boxesPerCarton: 320, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP12', name: "Sadapron 100", boxesPerCarton: 440, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP13', name: "Venokern", boxesPerCarton: 72, caps: { 'Pallet L': 120, 'Pallet N': 60, 'Pallet 1A': 120 } },
-    { id: 'SP14', name: "Auricularum", boxesPerCarton: 196, caps: { 'Pallet L': 31, 'Pallet N': 10, 'Pallet 1A': 25 } },
-    { id: 'SP15', name: "CandeKern 16 (2 vỉ x 14 viên)", boxesPerCarton: 72, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
-    { id: 'SP16', name: "Domreme", boxesPerCarton: 400, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP17', name: "Famopsin", boxesPerCarton: 360, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP18', name: "KernHistine 16", boxesPerCarton: 56, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
-    { id: 'SP19', name: "KernHistine 8", boxesPerCarton: 56, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
-    { id: 'SP20', name: "Klevaflu", boxesPerCarton: 48, caps: { 'Pallet L': 55, 'Pallet N': 25, 'Pallet 1A': 55 } },
-    { id: 'SP21', name: "Nazofix 0.05%", boxesPerCarton: 80, caps: { 'Pallet L': 60, 'Pallet N': 30, 'Pallet 1A': 60 } },
-    { id: 'SP22', name: "Propain", boxesPerCarton: 140, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP23', name: "Propain Syrup (Hộp 01 chai)", boxesPerCarton: 64, caps: { 'Pallet L': 32, 'Pallet N': 15, 'Pallet 1A': 32 } },
-    { id: 'SP24', name: "Remeclar 250", boxesPerCarton: 500, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP25', name: "Remeclar 500", boxesPerCarton: 380, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP26', name: "Sadapron 300", boxesPerCarton: 460, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP27', name: "Calcium (Hộp 10 vỉ x 10 viên)", boxesPerCarton: 225, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP28', name: "Clomedin 100 (Hộp 5 vỉ x 10 viên)", boxesPerCarton: 465, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP29', name: "Clomedin 25 (Hộp 5 vỉ x 10 viên)", boxesPerCarton: 600, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP30', name: "Cypdicar (Hộp 03 vỉ x10 viên )", boxesPerCarton: 880, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP31', name: "Cyplosart 50 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 880, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP32', name: "Diclowal (Hộp 2 vỉ x 5 viên đặt)", boxesPerCarton: 255, caps: { 'Pallet L': 30, 'Pallet N': 10, 'Pallet 1A': 25 } },
-    { id: 'SP33', name: "Elpesom 50 µg/dose (Hộp 1 chai)", boxesPerCarton: 288, caps: { 'Pallet L': 32, 'Pallet N': 15, 'Pallet 1A': 32 } },
-    { id: 'SP34', name: "Famopsin (Hộp 10 vỉ x 10 viên)", boxesPerCarton: 360, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-    { id: 'SP35', name: "Gorsyta (Hộp/08 vỉ X 07 viên)", boxesPerCarton: 64, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP36', name: "Klevator", boxesPerCarton: 448, caps: { 'Pallet L': 31, 'Pallet N': 10, 'Pallet 1A': 25 } },
-    { id: 'SP37', name: "Nazofix 0.05% (Hộp 1 chai x 18g)", boxesPerCarton: 80, caps: { 'Pallet L': 60, 'Pallet N': 30, 'Pallet 1A': 60 } },
-    { id: 'SP38', name: "Olimestra10 (Hộp 2 vỉ x15 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP39', name: "Olimestra20 (Hộp/2 vỉ X 15 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP40', name: "Olimestra20 (Hộp/2 vỉ X 14 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP41', name: "Oprymea 0.26 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP42', name: "Oprymea 0.52 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP43', name: "Terminus (Hộp 1 chai x 30ml)", boxesPerCarton: 100, caps: { 'Pallet L': 40, 'Pallet N': 20, 'Pallet 1A': 40 } },
-    { id: 'SP44', name: "Torendo Q1 (Hộp/03 vỉ X 10 viên)", boxesPerCarton: 160, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP45', name: "Torendo Q2 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP46', name: "Yradan 10 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-    { id: 'SP47', name: "Yradan 5 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 160, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } }
+            { id: 'SP1', name: "Bamifen", boxesPerCarton: 680, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP2', name: "Calcium", boxesPerCarton: 225, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP3', name: "CandeKern 8", boxesPerCarton: 72, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
+            { id: 'SP4', name: "Codalgin Forte", boxesPerCarton: 192, caps: { 'Pallet L': 54, 'Pallet N': 27, 'Pallet T1': 35, 'Pallet T2': 35, 'Pallet 1A': 54 } },
+            { id: 'SP5', name: "Colchicina", boxesPerCarton: 100, caps: { 'Pallet L': 100, 'Pallet N': 48, 'Pallet T1': 45, 'Pallet T2': 60, 'Pallet 1A': 100 } },
+            { id: 'SP6', name: "DogmaKern", boxesPerCarton: 192, caps: { 'Pallet L': 84, 'Pallet N': 25, 'Pallet T1': 50, 'Pallet T2': 34, 'Pallet 1A': 80 } },
+            { id: 'SP7', name: "Folihem", boxesPerCarton: 175, caps: { 'Pallet L': 55, 'Pallet N': 25, 'Pallet 1A': 55 } },
+            { id: 'SP8', name: "Lovarem", boxesPerCarton: 760, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP9', name: "Oprymea0.26", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP10', name: "Oprymea0.52", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP11', name: "Remebentin 100", boxesPerCarton: 320, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP12', name: "Sadapron 100", boxesPerCarton: 440, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP13', name: "Venokern", boxesPerCarton: 72, caps: { 'Pallet L': 120, 'Pallet N': 60, 'Pallet 1A': 120 } },
+            { id: 'SP14', name: "Auricularum", boxesPerCarton: 196, caps: { 'Pallet L': 31, 'Pallet N': 10, 'Pallet 1A': 25 } },
+            { id: 'SP15', name: "CandeKern 16 (2 vỉ x 14 viên)", boxesPerCarton: 72, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
+            { id: 'SP16', name: "Domreme", boxesPerCarton: 400, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP17', name: "Famopsin", boxesPerCarton: 360, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP18', name: "KernHistine 16", boxesPerCarton: 56, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
+            { id: 'SP19', name: "KernHistine 8", boxesPerCarton: 56, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
+            { id: 'SP20', name: "Klevaflu", boxesPerCarton: 48, caps: { 'Pallet L': 55, 'Pallet N': 25, 'Pallet 1A': 55 } },
+            { id: 'SP21', name: "Nazofix 0.05%", boxesPerCarton: 80, caps: { 'Pallet L': 60, 'Pallet N': 30, 'Pallet 1A': 60 } },
+            { id: 'SP22', name: "Propain", boxesPerCarton: 140, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP23', name: "Propain Syrup (Hộp 01 chai)", boxesPerCarton: 64, caps: { 'Pallet L': 32, 'Pallet N': 15, 'Pallet 1A': 32 } },
+            { id: 'SP24', name: "Remeclar 250", boxesPerCarton: 500, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP25', name: "Remeclar 500", boxesPerCarton: 380, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP26', name: "Sadapron 300", boxesPerCarton: 460, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP27', name: "Calcium (Hộp 10 vỉ x 10 viên)", boxesPerCarton: 225, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP28', name: "Clomedin 100 (Hộp 5 vỉ x 10 viên)", boxesPerCarton: 465, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP29', name: "Clomedin 25 (Hộp 5 vỉ x 10 viên)", boxesPerCarton: 600, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP30', name: "Cypdicar (Hộp 03 vỉ x10 viên )", boxesPerCarton: 880, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP31', name: "Cyplosart 50 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 880, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP32', name: "Diclowal (Hộp 2 vỉ x 5 viên đặt)", boxesPerCarton: 255, caps: { 'Pallet L': 30, 'Pallet N': 10, 'Pallet 1A': 25 } },
+            { id: 'SP33', name: "Elpesom 50 µg/dose (Hộp 1 chai)", boxesPerCarton: 288, caps: { 'Pallet L': 32, 'Pallet N': 15, 'Pallet 1A': 32 } },
+            { id: 'SP34', name: "Famopsin (Hộp 10 vỉ x 10 viên)", boxesPerCarton: 360, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+            { id: 'SP35', name: "Gorsyta (Hộp/08 vỉ X 07 viên)", boxesPerCarton: 64, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP36', name: "Klevator", boxesPerCarton: 448, caps: { 'Pallet L': 31, 'Pallet N': 10, 'Pallet 1A': 25 } },
+            { id: 'SP37', name: "Nazofix 0.05% (Hộp 1 chai x 18g)", boxesPerCarton: 80, caps: { 'Pallet L': 60, 'Pallet N': 30, 'Pallet 1A': 60 } },
+            { id: 'SP38', name: "Olimestra10 (Hộp 2 vỉ x15 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP39', name: "Olimestra20 (Hộp/2 vỉ X 15 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP40', name: "Olimestra20 (Hộp/2 vỉ X 14 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP41', name: "Oprymea 0.26 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP42', name: "Oprymea 0.52 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP43', name: "Terminus (Hộp 1 chai x 30ml)", boxesPerCarton: 100, caps: { 'Pallet L': 40, 'Pallet N': 20, 'Pallet 1A': 40 } },
+            { id: 'SP44', name: "Torendo Q1 (Hộp/03 vỉ X 10 viên)", boxesPerCarton: 160, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP45', name: "Torendo Q2 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP46', name: "Yradan 10 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+            { id: 'SP47', name: "Yradan 5 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 160, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } }
         ];
 
-        // ĐÃ CẬP NHẬT TÊN PALLET MỚI VÀO PL_TYPES
         const PL_TYPES = [
             { id: 'Pallet L', name: 'Pallet' },
             { id: 'Pallet N', name: 'Pallet' },
@@ -174,11 +183,44 @@
         ];
 
         function init() {
-            const select = document.getElementById('product-select');
-            DATABASE.forEach(p => {
-                select.innerHTML += `<option value="${p.id}">${p.name} (Quy cách: ${p.boxesPerCarton} hộp/thùng)</option>`;
+            renderDropdownList(DATABASE);
+            
+            // Ẩn dropdown khi click ra ngoài
+            document.addEventListener('click', function(e) {
+                if (!document.getElementById('product-search').contains(e.target) && !document.getElementById('product-dropdown').contains(e.target)) {
+                    hideDropdown();
+                }
             });
-            renderToggles();
+        }
+
+        // --- CÁC HÀM XỬ LÝ TÌM KIẾM ---
+        function renderDropdownList(list) {
+            const ul = document.getElementById('product-dropdown');
+            ul.innerHTML = '';
+            if(list.length === 0) {
+                ul.innerHTML = '<li class="p-4 text-sm text-slate-500 text-center italic">Không tìm thấy sản phẩm</li>';
+                return;
+            }
+            list.forEach(p => {
+                ul.innerHTML += `<li onclick="selectProduct('${p.id}', '${p.name}')" class="p-3 hover:bg-blue-50 cursor-pointer text-sm font-bold text-slate-700 transition-colors">${p.name} <span class="text-xs text-slate-400 font-normal block mt-0.5">Quy cách: ${p.boxesPerCarton} hộp/thùng</span></li>`;
+            });
+        }
+
+        function filterProducts() {
+            const keyword = document.getElementById('product-search').value.toLowerCase();
+            const filtered = DATABASE.filter(p => p.name.toLowerCase().includes(keyword));
+            renderDropdownList(filtered);
+            showDropdown();
+        }
+
+        function showDropdown() { document.getElementById('product-dropdown').classList.remove('hidden'); }
+        function hideDropdown() { document.getElementById('product-dropdown').classList.add('hidden'); }
+
+        function selectProduct(id, name) {
+            document.getElementById('product-select').value = id;
+            document.getElementById('product-search').value = name;
+            hideDropdown();
+            handleProductChange();
         }
 
         function handleProductChange() {
@@ -186,23 +228,17 @@
             calculateFromBoxes();
         }
 
-        // TẠO GIAO DIỆN CÓ XỬ LÝ DỮ LIỆU RỖNG
         function renderToggles() {
             const container = document.getElementById('pallet-toggles-container');
             const productId = document.getElementById('product-select').value;
             const product = DATABASE.find(p => p.id === productId);
+            if (!product) return;
             
             container.innerHTML = "";
             PL_TYPES.forEach(pl => {
                 const capacity = product.caps[pl.id];
-                
-                // Kiểm tra xem sản phẩm có thông số sức chứa cho Pallet này không
                 const hasData = capacity && capacity > 0;
-                
-                // Mặc định bật Pallet L, N, T1 (nếu có data)
                 const isChecked = hasData && ['Pallet L', 'Pallet N', 'Pallet T1'].includes(pl.id) ? 'checked' : ''; 
-                
-                // Xử lý giao diện khi không có data (disable nút, đổi màu)
                 const disabledAttr = hasData ? '' : 'disabled';
                 const wrapperStyle = hasData ? 'hover:border-blue-300' : 'bg-slate-50 opacity-70';
                 const capacityHTML = hasData 
@@ -227,6 +263,7 @@
         function calculateFromBoxes() {
             const productId = document.getElementById('product-select').value;
             const product = DATABASE.find(p => p.id === productId);
+            if(!product) return;
             const boxesStr = document.getElementById('input-boxes').value;
             
             if (!boxesStr || boxesStr.trim() === "") {
@@ -240,7 +277,6 @@
 
             const fullCartons = Math.floor(boxes / product.boxesPerCarton);
             const remainderBoxes = boxes % product.boxesPerCarton;
-            
             let totalCartons = fullCartons;
             let breakdownText = "";
 
@@ -262,24 +298,24 @@
 
         function runOptimization() {
             const totalCartons = parseInt(document.getElementById('input-cartons').value) || 0;
-            if (totalCartons <= 0) {
-                alert("Vui lòng nhập số lượng hợp lệ!");
+            const productId = document.getElementById('product-select').value;
+            if (totalCartons <= 0 || !productId) {
+                alert("Vui lòng nhập số lượng và chọn sản phẩm!");
                 return;
             }
 
-            const productId = document.getElementById('product-select').value;
             const product = DATABASE.find(p => p.id === productId);
 
             let activePallets = PL_TYPES.map(pl => {
                 return {
                     id: pl.id,
-                    cap: product.caps[pl.id] || 0, // Fallback về 0 nếu dữ liệu rỗng
+                    cap: product.caps[pl.id] || 0,
                     active: document.getElementById(`toggle-${pl.id}`).checked
                 };
             }).filter(p => p.active && p.cap > 0).sort((a, b) => b.cap - a.cap);
 
             if (activePallets.length === 0) {
-                alert("Vui lòng BẬT ít nhất 1 loại Pallet có dữ liệu sức chứa!");
+                alert("Vui lòng BẬT ít nhất 1 loại Pallet có dữ liệu!");
                 return;
             }
 
@@ -288,13 +324,14 @@
             let dockHtml = "";
             let totalCapacityUsed = 0;
             let totalPalletsCount = 0;
+            let palletIndex = 1; // Khởi tạo số thứ tự
 
             activePallets.forEach(p => {
                 let count = Math.floor(remaining / p.cap);
                 if (count > 0) {
                     resultList[p.id] = count;
                     for (let i = 0; i < count; i++) {
-                        dockHtml += renderPalletBox(p.id, p.cap, p.cap);
+                        dockHtml += renderPalletBox(p.id, p.cap, p.cap, palletIndex++);
                         totalCapacityUsed += p.cap;
                         totalPalletsCount++;
                     }
@@ -304,9 +341,8 @@
 
             if (remaining > 0) {
                 let smallestPallet = activePallets[activePallets.length - 1];
-                
                 resultList[smallestPallet.id] = (resultList[smallestPallet.id] || 0) + 1;
-                dockHtml += renderPalletBox(smallestPallet.id, remaining, smallestPallet.cap);
+                dockHtml += renderPalletBox(smallestPallet.id, remaining, smallestPallet.cap, palletIndex++);
                 totalCapacityUsed += smallestPallet.cap;
                 totalPalletsCount++;
             }
@@ -316,7 +352,7 @@
             
             const efficiency = Math.round((totalCartons / totalCapacityUsed) * 100);
             document.getElementById('res-efficiency-text').innerText = efficiency + "%";
-            document.getElementById('res-eff-badge').innerText = efficiency + "% EFF.";
+            document.getElementById('res-eff-badge').innerText = efficiency + "%";
             
             const strokeDash = `${efficiency}, 100`;
             document.getElementById('efficiency-circle').setAttribute('stroke-dasharray', strokeDash);
@@ -328,20 +364,21 @@
             document.getElementById('res-packing-list').innerText = packingText.join("\n");
         }
 
-        function renderPalletBox(type, fill, max) {
+        function renderPalletBox(type, fill, max, index) {
             const heightPerc = (fill / max) * 100;
-            // ĐÃ THAY ĐỔI ICON 3D CHUYÊN NGHIỆP HƠN
-            const iconSvg = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="drop-shadow-md"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`;
+            const iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="drop-shadow-sm"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`;
             
             return `
-                <div class="flex flex-col items-start w-[85px]">
+                <div class="flex flex-col items-center w-[100px] mb-6 mx-2 transition-all hover:-translate-y-1">
+                    <div class="text-[13px] font-black text-slate-400 mb-1">#${index}</div>
                     <div class="pallet-box">
                         <div class="pallet-icon">${iconSvg}</div>
                         <div class="pallet-fill" style="height: ${heightPerc}%"></div>
                     </div>
-                    <div class="mt-2 text-left">
-                        <div class="text-[11px] font-bold text-slate-700">${type}</div>
-                        <div class="text-[11px] text-slate-500">${fill}/${max}</div>
+                    <div class="pallet-base"></div>
+                    <div class="mt-3 text-center w-full">
+                        <div class="text-[10px] font-black text-blue-800 bg-blue-50 border border-blue-100 rounded px-2 py-1 tracking-wider uppercase">${type}</div>
+                        <div class="text-[12px] font-bold text-slate-600 mt-1">${fill} <span class="text-[10px] font-medium text-slate-400">/ ${max}</span></div>
                     </div>
                 </div>`;
         }
