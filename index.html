@@ -8,28 +8,28 @@
     <link rel="icon" type="image/png" href="https://nafarma.com/wp-content/uploads/2024/12/cropped-LOGO-TAGLINE-01-180x180.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f0f4f8; font-family: 'Plus Jakarta Sans', sans-serif; color: #334155; }
+        body { background-color: #f0f4f8; font-family: 'Be Vietnam Pro', sans-serif; color: #334155; }
         .glass-card { background: #ffffff; border-radius: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.04); }
         
-        /* Pallet UI - Thiết kế chuyên nghiệp hơn */
+        /* Pallet UI */
         .pallet-box { width: 90px; height: 100px; border: 2px solid #cbd5e1; background: #f8fafc; border-radius: 8px 8px 0 0; position: relative; display: flex; align-items: flex-end; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.05); border-bottom: none; margin-bottom: 2px; }
         .pallet-fill { background: linear-gradient(to top, #2563eb, #60a5fa); width: 100%; transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.95; }
         .pallet-base { width: 96px; height: 14px; background: #8b5a2b; border-radius: 2px; position: relative; left: -3px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); background-image: linear-gradient(90deg, #603813 0%, #8b5a2b 50%, #603813 100%); border-bottom: 2px solid #4a290c;}
         .pallet-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; color: white; opacity: 0.9; }
         
-        /* Biểu đồ tròn - Thiết kế dạng Gauge Chart hiện đại */
+        /* Biểu đồ tròn */
         .circular-chart { display: block; margin: 0 auto; max-width: 110px; max-height: 110px; transform: rotate(-90deg); }
         .circle-bg { fill: none; stroke: #f1f5f9; stroke-width: 4; }
         .circle { fill: none; stroke: #10b981; stroke-width: 4; stroke-linecap: round; transition: stroke-dasharray 1s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Toggles & Disabled state */
+        /* Toggles */
         .toggle-checkbox:checked:not(:disabled) + .toggle-label { background-color: #0f52ba; border-color: #0f52ba; }
         .toggle-checkbox:checked:not(:disabled) + .toggle-label::after { transform: translateX(100%); border-color: white; }
         .toggle-checkbox:disabled + .toggle-label { cursor: not-allowed; opacity: 0.4; }
 
-        /* Scrollbar cho danh sách tìm kiếm */
+        /* Scrollbar */
         #product-dropdown::-webkit-scrollbar { width: 6px; }
         #product-dropdown::-webkit-scrollbar-track { background: #f1f1f1; }
         #product-dropdown::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -37,95 +37,109 @@
 </head>
 <body class="p-4 md:p-8 flex justify-center min-h-screen items-start">
 
-    <div class="w-full max-w-5xl glass-card p-8 md:p-12">
+    <div class="w-full max-w-7xl glass-card p-6 md:p-10">
         
-        <div class="flex justify-between items-center mb-10 border-b border-slate-100 pb-6">
+        <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-6">
             <div class="flex items-center gap-6">
-                <div class="h-14 flex items-center justify-center">
+                <div class="h-[55px] flex items-center justify-center">
                     <img src="https://nafarma.com/wp-content/uploads/2024/12/LOGO-TAGLINE-longer-ver-01.png" 
                          alt="Logo" 
                          class="h-full w-auto object-contain">
                 </div>
                 <div class="h-10 w-[1px] bg-slate-200 hidden sm:block"></div>
                 <div>
-                    <h1 class="text-2xl font-semibold text-slate-900 tracking-tight leading-none mb-1">
-        Tối Ưu Hóa Pallet
-    </h1>
-                    <p class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Công cụ tính toán pallets kho</p>
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight leading-none mb-1">
+                        Tối Ưu Hóa Pallet
+                    </h1>
+                    <p class="text-[12px] text-slate-500 font-semibold uppercase tracking-wider">Công cụ tính toán pallets kho</p>
                 </div>
             </div>
         </div>
 
-        <div class="mb-10 relative">
-            <div class="absolute top-0 right-0 flex gap-8 text-right z-10">
-                <div>
-                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tổng Pallets</div>
-                    <div id="res-total-pallets" class="text-2xl font-black text-slate-800">0</div>
-                </div>
-                <div>
-                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hiệu Quả</div>
-                    <div id="res-efficiency-text" class="text-2xl font-black text-slate-800">0%</div>
-                </div>
-                <div>
-                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Danh Sách Pallet</div>
-                    <div id="res-packing-list" class="text-lg font-bold text-slate-800 whitespace-pre-line">-</div>
-                </div>
-            </div>
-
-            <h2 class="text-lg font-black text-slate-800 mb-8 uppercase tracking-widest">Sơ Đồ Theo Dõi Pallet</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
-            <div class="bg-white rounded-2xl min-h-[300px] flex flex-col justify-between relative border border-slate-50 shadow-inner p-6">
-                <div id="dock-view" class="flex flex-wrap gap-6 justify-start pt-12 pr-44">
-                    <p class="text-slate-400 italic text-sm">Nhập thông tin và chạy tối ưu để xem kết quả...</p>
-                </div>
+            <div class="lg:col-span-5 flex flex-col gap-6">
                 
-                <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-xl border border-slate-100 flex flex-col items-center">
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hiệu suất Pallet</div>
-                    <div class="relative flex items-center justify-center w-24 h-24">
-                        <svg viewBox="0 0 36 36" class="circular-chart absolute inset-0 w-full h-full">
-                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                            <path id="efficiency-circle" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="0, 100" />
-                        </svg>
-                        <div class="absolute flex flex-col items-center">
-                            <span id="res-eff-badge" class="text-xl font-black text-slate-800">0%</span>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex flex-col gap-5">
+                    <div class="relative">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tên Sản Phẩm (Tìm kiếm)</label>
+                        <input type="text" id="product-search" placeholder="Gõ tên để tìm..." class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-700 shadow-sm transition-all" autocomplete="off" onfocus="showDropdown()" oninput="filterProducts()">
+                        <input type="hidden" id="product-select">
+                        <ul id="product-dropdown" class="absolute z-50 w-full bg-white border border-slate-200 rounded-xl shadow-2xl mt-1 max-h-60 overflow-y-auto hidden divide-y divide-slate-100">
+                        </ul>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Số Hộp</label>
+                            <input type="number" id="input-boxes" oninput="calculateFromBoxes()" onkeypress="handleEnter(event)" placeholder="VD: 2000" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
+                            <div id="box-breakdown" class="mt-2 text-[11px] font-semibold text-blue-600 h-4"></div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Số Thùng</label>
+                            <input type="number" id="input-cartons" oninput="clearBoxesOnCartonInput()" onkeypress="handleEnter(event)" placeholder="0" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
+                            <div class="mt-2 text-[11px] font-medium text-slate-400">Có thể nhập trực tiếp</div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <hr class="border-slate-100 mb-8">
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <div class="relative">
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tên Sản Phẩm (Tìm kiếm)</label>
-                <input type="text" id="product-search" placeholder="Gõ tên để tìm..." class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-700 shadow-sm transition-all" autocomplete="off" onfocus="showDropdown()" oninput="filterProducts()">
-                <input type="hidden" id="product-select">
-                <ul id="product-dropdown" class="absolute z-50 w-full bg-white border border-slate-200 rounded-xl shadow-2xl mt-1 max-h-60 overflow-y-auto hidden divide-y divide-slate-100">
-                </ul>
-            </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nhập Số Lượng Hộp</label>
-                <input type="number" id="input-boxes" oninput="calculateFromBoxes()" placeholder="Ví dụ: 2000" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
-                <div id="box-breakdown" class="mt-2 text-[12px] font-semibold text-blue-600 h-4"></div>
-            </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nhập Số Lượng Thùng</label>
-                <input type="number" id="input-cartons" oninput="clearBoxesOnCartonInput()" placeholder="0" class="w-full bg-white p-4 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-slate-800 shadow-sm transition-all">
-                <div class="mt-2 text-[11px] font-medium text-slate-400">Có thể nhập trực tiếp số thùng</div>
-            </div>
-        </div>
-
-        <div class="mb-10">
-            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Cấu hình Pallet có sẵn</h3>
-            <div id="pallet-toggles-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Cấu hình Pallet cho sản phẩm</h3>
+                    <div id="pallet-toggles-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+                        <p class="text-sm text-slate-400 italic">Vui lòng chọn sản phẩm để xem cấu hình.</p>
+                    </div>
                 </div>
+
+                <button onclick="runOptimization()" class="w-full bg-[#0f52ba] hover:bg-blue-800 text-white font-bold py-5 rounded-xl transition-all duration-300 uppercase tracking-widest text-sm shadow-md hover:shadow-xl mt-2">
+                    Run Optimization
+                </button>
+            </div>
+
+            <div class="lg:col-span-7 flex flex-col">
+                
+                <div class="flex gap-8 text-left mb-6 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                    <div class="flex-1">
+                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tổng Pallets</div>
+                        <div id="res-total-pallets" class="text-3xl font-black text-blue-600">0</div>
+                    </div>
+                    <div class="w-[1px] bg-slate-100"></div>
+                    <div class="flex-1">
+                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hiệu Quả</div>
+                        <div id="res-efficiency-text" class="text-3xl font-black text-emerald-500">0%</div>
+                    </div>
+                    <div class="w-[1px] bg-slate-100 hidden sm:block"></div>
+                    <div class="flex-2 hidden sm:block">
+                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quy cách Đóng Gói</div>
+                        <div id="res-packing-list" class="text-sm font-bold text-slate-700 whitespace-pre-line leading-relaxed">-</div>
+                    </div>
+                </div>
+
+                <h2 class="text-sm font-black text-slate-800 mb-4 uppercase tracking-widest">Sơ Đồ Lên Pallet Thực Tế</h2>
+                
+                <div class="bg-white rounded-2xl flex-grow min-h-[400px] flex flex-col relative border border-slate-200 shadow-inner p-6 overflow-y-auto">
+                    <div id="dock-view" class="flex flex-wrap gap-6 justify-start">
+                        <div class="w-full h-full flex flex-col items-center justify-center text-slate-300 pt-20">
+                            <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                            <p class="text-sm font-medium">Nhập thông tin bên trái và nhấn Run để xem sơ đồ</p>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute bottom-4 right-4 bg-white/95 backdrop-blur p-4 rounded-2xl shadow-lg border border-slate-100 flex flex-col items-center scale-90 origin-bottom-right">
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Mức độ lấp đầy</div>
+                        <div class="relative flex items-center justify-center w-24 h-24">
+                            <svg viewBox="0 0 36 36" class="circular-chart absolute inset-0 w-full h-full">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path id="efficiency-circle" class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="0, 100" />
+                            </svg>
+                            <div class="absolute flex flex-col items-center">
+                                <span id="res-eff-badge" class="text-xl font-black text-slate-800">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-
-        <button onclick="runOptimization()" class="w-full bg-slate-200 hover:bg-[#0f52ba] hover:text-white text-slate-600 font-bold py-5 rounded-2xl transition-all duration-300 uppercase tracking-widest text-sm shadow-sm hover:shadow-xl">
-            Run Optimization
-        </button>
-
     </div>
 
     <script>
@@ -198,6 +212,13 @@
             });
         }
 
+        // Bổ sung: Lắng nghe phím Enter để chạy Run
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                runOptimization();
+            }
+        }
+
         // --- CÁC HÀM XỬ LÝ TÌM KIẾM ---
         function renderDropdownList(list) {
             const ul = document.getElementById('product-dropdown');
@@ -248,13 +269,13 @@
                 const wrapperStyle = hasData ? 'hover:border-blue-300' : 'bg-slate-50 opacity-70';
                 const capacityHTML = hasData 
                     ? `<span class="font-bold text-blue-600">${capacity} Thùng</span>` 
-                    : `<span class="font-bold text-red-400 italic">Không có dữ liệu</span>`;
+                    : `<span class="font-bold text-red-400 italic">N/A</span>`;
                 
                 container.innerHTML += `
-                    <div class="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-colors ${wrapperStyle}">
+                    <div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl transition-colors ${wrapperStyle}">
                         <div>
                             <div class="font-bold text-slate-700 text-sm">${pl.id}</div>
-                            <div class="text-xs text-slate-500 mt-1">${pl.name} - ${capacityHTML}</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">Sức chứa: ${capacityHTML}</div>
                         </div>
                         <label class="relative inline-flex items-center ${hasData ? 'cursor-pointer' : 'cursor-not-allowed'}">
                             <input type="checkbox" id="toggle-${pl.id}" class="toggle-checkbox sr-only peer" ${isChecked} ${disabledAttr}>
@@ -298,24 +319,25 @@
 
         function clearBoxesOnCartonInput() {
             document.getElementById('input-boxes').value = "";
-            document.getElementById('box-breakdown').innerText = "";
+            document.getElementById('box-breakdown').innerText = "Nhập trực tiếp số thùng";
         }
 
         function runOptimization() {
             const totalCartons = parseInt(document.getElementById('input-cartons').value) || 0;
             const productId = document.getElementById('product-select').value;
             if (totalCartons <= 0 || !productId) {
-                alert("Vui lòng nhập số lượng và chọn sản phẩm!");
+                alert("Vui lòng nhập đầy đủ Tên sản phẩm và Số lượng!");
                 return;
             }
 
             const product = DATABASE.find(p => p.id === productId);
 
             let activePallets = PL_TYPES.map(pl => {
+                const toggle = document.getElementById(`toggle-${pl.id}`);
                 return {
                     id: pl.id,
                     cap: product.caps[pl.id] || 0,
-                    active: document.getElementById(`toggle-${pl.id}`).checked
+                    active: toggle ? toggle.checked : false
                 };
             }).filter(p => p.active && p.cap > 0).sort((a, b) => b.cap - a.cap);
 
@@ -329,7 +351,7 @@
             let dockHtml = "";
             let totalCapacityUsed = 0;
             let totalPalletsCount = 0;
-            let palletIndex = 1; // Khởi tạo số thứ tự
+            let palletIndex = 1;
 
             activePallets.forEach(p => {
                 let count = Math.floor(remaining / p.cap);
@@ -382,7 +404,7 @@
                     </div>
                     <div class="pallet-base"></div>
                     <div class="mt-3 text-center w-full">
-                        <div class="text-[10px] font-black text-blue-800 bg-blue-50 border border-blue-100 rounded px-2 py-1 tracking-wider uppercase">${type}</div>
+                        <div class="text-[10px] font-black text-blue-800 bg-blue-50 border border-blue-100 rounded px-2 py-1 tracking-wider uppercase truncate" title="${type}">${type}</div>
                         <div class="text-[12px] font-bold text-slate-600 mt-1">${fill} <span class="text-[10px] font-medium text-slate-400">/ ${max}</span></div>
                     </div>
                 </div>`;
