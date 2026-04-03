@@ -2,49 +2,51 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công cụ tính số pallet - Nafarma Co., Ltd</title>
-    <link rel="icon" type="image/png" href="https://nafarma.com/wp-content/uploads/2024/12/cropped-LOGO-TAGLINE-01-180x180.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Công cụ tính số pallet</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.freepik.com/256/1335/1335289.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         html { font-size: 95%; } 
         body { background-color: #f0f4f8; font-family: 'Be Vietnam Pro', sans-serif; color: #334155; }
-        
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        /* Toggle Switch */
-        .toggle-checkbox:checked { right: 0; border-color: #3B82F6; }
-        .toggle-checkbox:checked + .toggle-label { background-color: #3B82F6; }
-        .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
-        .toggle-label { background-color: #cbd5e1; transition: all 0.3s; }
-
-        /* Pallet Box - Nhỏ lại 5% */
+        /* Pallet Box */
         .pallet-box { width: 76px; height: 90px; border: 3px solid #3b82f6; background: #eff6ff; border-radius: 6px 6px 0 0; position: relative; display: flex; align-items: flex-end; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.05); border-bottom: none;}
         .pallet-fill { background: linear-gradient(to top, #2563eb, #60a5fa); width: 100%; transition: height 0.6s ease; opacity: 0.95; position: relative; }
-        .pallet-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.3); }
-        .pallet-base { width: 86px; height: 12px; background: #8b5a2b; border-radius: 2px; position: relative;box-shadow: 0 4px 6px rgba(0,0,0,0.15); background-image: linear-gradient(90deg, #603813 0%, #8b5a2b 50%, #603813 100%); display: flex; justify-content: space-between; padding: 0 4px; border-bottom: 2px solid #4a290c;}
-        .pallet-base::before, .pallet-base::after, .pallet-base i { content: ''; width: 6px; height: 100%; background: #4a290c; }
+        .pallet-base { width: 86px; height: 12px; background: #8b5a2b; border-radius: 2px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.15); background-image: linear-gradient(90deg, #603813 0%, #8b5a2b 50%, #603813 100%); display: flex; justify-content: space-between; padding: 0 4px; border-bottom: 2px solid #4a290c;}
+        .pallet-base i { width: 6px; height: 100%; background: #4a290c; }
         
-        /* Tên sản phẩm giữa Icon */
-        .pallet-icon-text { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); z-index: 10; color: rgb(15, 15, 15); text-align: center; font-size: 10px; font-weight: 800; line-height: 1.2; text-shadow: 0px 1px 3px rgba(0,0,0,0.8); padding: 0 4px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; pointer-events: none;}
+        /* Overflow Block */
+        .overflow-box { width: 76px; height: 90px; border: 3px dashed #ef4444; background: #fee2e2; border-radius: 8px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 
+        .pallet-icon-text { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); z-index: 10; color: white; text-align: center; font-size: 10px; font-weight: 800; line-height: 1.2; text-shadow: 0px 1px 3px rgba(0,0,0,0.8); padding: 0 4px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; pointer-events: none;}
         .circular-chart { display: block; margin: 0 auto; max-width: 110px; max-height: 110px; transform: rotate(-90deg); }
         .circle-bg { fill: none; stroke: #f1f5f9; stroke-width: 4; }
         .circle { fill: none; stroke: #10b981; stroke-width: 4; stroke-linecap: round; transition: stroke-dasharray 1s ease; }
+        .mini-toggle:checked + .mini-label { background-color: #3B82F6; }
+        .mini-toggle:checked + .mini-label::after { transform: translateX(12px); }
+        .mini-label { background-color: #cbd5e1; width: 28px; height: 16px; border-radius: 99px; position: relative; cursor: pointer; transition: 0.3s; display: block; }
+        .mini-label::after { content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: white; border-radius: 50%; transition: 0.3s; }
+        
+        /* Highlight Lỗi */
+        .row-incompatible { border-color: #ef4444 !important; background-color: #fef2f2 !important; border-width: 2px !important; }
     </style>
 </head>
 <body class="p-2 md:p-6">
 
-<div class="max-w-[1400px] mx-auto bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
+<div id="toast-container" class="fixed top-5 right-5 z-[150] flex flex-col gap-3 pointer-events-none"></div>
+
+<div class="max-w-[1400px] mx-auto bg-white rounded-3xl shadow-lg p-6 border border-gray-100 relative">
     <header class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
         <div class="flex items-center gap-6">
             <div class="h-[55px] flex items-center justify-center">
-                <img src="https://nafarma.com/wp-content/uploads/2024/12/LOGO-TAGLINE-longer-ver-01.png" alt="Logo" class="h-full w-auto object-contain">
+                <img src="https://t4.ftcdn.net/jpg/05/92/74/39/360_F_592743937_nARvHweQ1wznPdkPb6zJ7hJseEQQEYEG.jpg" alt="Logo" class="h-full w-auto object-contain">
             </div>
-            <div class="h-10 w-[1px] bg-slate-200 hidden sm:block"></div>
+            <div class="h-12 w-[1px] bg-slate-200 hidden sm:block"></div>
             <div>
                 <h1 class="text-2xl font-bold text-slate-900 tracking-tight leading-none mb-1">Tối Ưu Hóa Pallet</h1>
                 <p class="text-[12px] text-slate-500 font-semibold uppercase tracking-wider">Công cụ tính toán pallets kho</p>
@@ -53,65 +55,106 @@
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
         <div class="lg:col-span-7 flex flex-col gap-5">
             <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-sm">
-                
                 <div class="flex justify-between items-center mb-4 border-b border-slate-200 pb-3">
                     <h2 class="text-sm font-black text-slate-800 uppercase tracking-widest">Danh Sách Sản Phẩm</h2>
                     <button onclick="clearAllData()" class="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-red-700 hover:bg-red-50 py-1.5 px-3 rounded-lg transition-colors border border-red-100 bg-white">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         Xóa tất cả
                     </button>
                 </div>
 
-                <div id="product-rows-container" class="flex flex-col gap-4 pb-2">
+                <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-3 mb-4 flex items-start gap-3 shadow-sm">
+                    <div class="text-indigo-500 mt-0.5">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
+                    <div class="text-[12px] text-indigo-900 leading-relaxed">
+                        <b>Mẹo:</b> Sử dụng nút 
+                        <span class="inline-flex items-center justify-center w-5 h-5 bg-white border border-indigo-200 rounded text-[10px] font-black mx-0.5 text-slate-600 shadow-sm">↑</span>
+                        <span class="inline-flex items-center justify-center w-5 h-5 bg-white border border-indigo-200 rounded text-[10px] font-black mx-0.5 text-slate-600 shadow-sm">↓</span> 
+                        để di chuyển ưu tiên.Sản phẩm #1 sẽ được lấy Pallet trước.
+                    </div>
+                </div>
 
+                <div id="product-rows-container" class="flex flex-col gap-4 pb-2"></div>
                 <div class="text-[11px] text-red-500 font-bold italic hidden mt-2" id="max-item-warning">* Hệ thống hỗ trợ tối đa 5 sản phẩm/lần</div>
 
-                <button id="add-product-btn" onclick="addProductRow()" class="w-full bg-white hover:bg-blue-50 border-2 border-dashed border-blue-200 text-blue-600 font-bold py-3.5 rounded-xl transition-all shadow-sm mt-4 flex justify-center items-center gap-2">
+                <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mt-3 mb-1">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+                        <div class="flex items-center gap-3">
+                            <h3 class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Kho Pallet Thực Tế</h3>
+                            <label class="relative inline-flex items-center cursor-pointer scale-90">
+                                <input type="checkbox" id="toggle-inventory-mode" class="sr-only peer" checked onchange="toggleInventoryMode()">
+                                <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="inventory-inputs-container" class="flex flex-wrap gap-2 justify-between">
+                        <div class="border rounded-[10px] py-2 px-1 flex-1 min-w-[65px] flex flex-col items-center border-blue-200 bg-blue-50/50 shadow-sm">
+                            <span class="font-bold text-[12px] text-blue-900 mb-1">Pallet L</span>
+                            <input type="number" id="pool-Pallet L" autocomplete="off" class="w-[85%] text-center bg-white border border-blue-200 rounded text-sm font-black text-blue-700 py-0.5 outline-none" value="0" min="0">
+                            <span id="rem-Pallet L" class="text-[10px] font-bold text-emerald-600 mt-1 hidden"></span>
+                        </div>
+                        <div class="border rounded-[10px] py-2 px-1 flex-1 min-w-[65px] flex flex-col items-center border-blue-200 bg-blue-50/50 shadow-sm">
+                            <span class="font-bold text-[12px] text-blue-900 mb-1">Pallet N</span>
+                            <input type="number" id="pool-Pallet N" autocomplete="off" class="w-[85%] text-center bg-white border border-blue-200 rounded text-sm font-black text-blue-700 py-0.5 outline-none" value="0" min="0">
+                            <span id="rem-Pallet N" class="text-[10px] font-bold text-emerald-600 mt-1 hidden"></span>
+                        </div>
+                        <div class="border rounded-[10px] py-2 px-1 flex-1 min-w-[65px] flex flex-col items-center border-blue-200 bg-blue-50/50 shadow-sm">
+                            <span class="font-bold text-[12px] text-blue-900 mb-1">Pallet T1</span>
+                            <input type="number" id="pool-Pallet T1" autocomplete="off" class="w-[85%] text-center bg-white border border-blue-200 rounded text-sm font-black text-blue-700 py-0.5 outline-none" value="0" min="0">
+                            <span id="rem-Pallet T1" class="text-[10px] font-bold text-emerald-600 mt-1 hidden"></span>
+                        </div>
+                        <div class="border rounded-[10px] py-2 px-1 flex-1 min-w-[65px] flex flex-col items-center border-blue-200 bg-blue-50/50 shadow-sm">
+                            <span class="font-bold text-[12px] text-blue-900 mb-1">Pallet T2</span>
+                            <input type="number" id="pool-Pallet T2" autocomplete="off" class="w-[85%] text-center bg-white border border-blue-200 rounded text-sm font-black text-blue-700 py-0.5 outline-none" value="0" min="0">
+                            <span id="rem-Pallet T2" class="text-[10px] font-bold text-emerald-600 mt-1 hidden"></span>
+                        </div>
+                        <div class="border rounded-[10px] py-2 px-1 flex-1 min-w-[65px] flex flex-col items-center border-blue-200 bg-blue-50/50 shadow-sm">
+                            <span class="font-bold text-[12px] text-blue-900 mb-1">Pallet 1A</span>
+                            <input type="number" id="pool-Pallet 1A" autocomplete="off" class="w-[85%] text-center bg-white border border-blue-200 rounded text-sm font-black text-blue-700 py-0.5 outline-none" value="0" min="0">
+                            <span id="rem-Pallet 1A" class="text-[10px] font-bold text-emerald-600 mt-1 hidden"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="add-product-btn" onclick="addProductRow()" class="w-full bg-white hover:bg-blue-50 border-2 border-dashed border-blue-200 text-blue-600 font-bold py-3.5 rounded-xl transition-all shadow-sm flex justify-center items-center gap-2 mt-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     Thêm sản phẩm
                 </button>
 
-                <button onclick="runOptimization()" class="w-full bg-[#0f52ba] hover:bg-blue-800 text-white font-black py-4 rounded-xl transition-all duration-300 uppercase tracking-widest text-sm shadow-md mt-4">
+                <button onclick="processOptimization()" class="w-full bg-[#0f52ba] hover:bg-blue-800 text-white font-black py-4 rounded-xl transition-all duration-300 uppercase tracking-widest text-sm shadow-md mt-4">
                     Bắt Đầu Tính Toán
                 </button>
-
             </div>
         </div>
 
         <div class="lg:col-span-5 flex flex-col gap-5">
             <div class="flex bg-white p-4 rounded-2xl border border-slate-200 shadow-sm items-start"> 
-    <div class="w-[20%] text-center">
-        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Tổng Pallets</div>
-        <div id="res-total-pallets" class="text-2xl font-black text-blue-600 leading-none">0</div>
-    </div>
-
-    <div class="w-[60%] border-x border-slate-100 px-4 flex flex-col">
-        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 text-center">Danh Sách Pallet</div>
-        <div id="res-packing-list" class="text-[13px] font-bold text-slate-700 whitespace-pre-line leading-tight max-h-24 overflow-y-auto custom-scrollbar text-center">
-            -
-        </div>
-    </div>
-
-    <div class="w-[20%] text-center">
-        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Hiệu quả</div>
-        <div id="res-efficiency-text" class="text-2xl font-black text-emerald-500 leading-none">0%</div>
-    </div>
-</div>
+                <div class="w-[20%] text-center">
+                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Tổng Pallet</div>
+                    <div id="res-total-pallets" class="text-2xl font-black text-blue-600 leading-none">0</div>
+                </div>
+                <div class="w-[60%] border-x border-slate-100 px-4 flex flex-col">
+                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 text-center">Danh Sách Pallet</div>
+                    <div id="res-packing-list" class="text-[13px] font-bold text-slate-700 whitespace-pre-line leading-tight max-h-24 overflow-y-auto custom-scrollbar text-center">-</div>
+                </div>
+                <div class="w-[20%] text-center">
+                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Hiệu quả</div>
+                    <div id="res-efficiency-text" class="text-2xl font-black text-emerald-500 leading-none">0%</div>
+                </div>
+            </div>
 
             <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex-grow min-h-[480px] flex flex-col relative">
                 <h3 class="font-bold text-slate-800 uppercase tracking-wide text-xs mb-4">Sơ Đồ Lên Pallet Thực Tế</h3>
-
                 <div id="dock-view" class="flex flex-wrap gap-x-5 gap-y-8 justify-start content-start overflow-y-auto custom-scrollbar flex-grow pb-24">
                     <div class="w-full h-full flex flex-col items-center justify-center text-slate-300 py-10">
-                        <svg class="h-16 w-16 mb-2 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                        <svg class="h-16 w-16 mb-2 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                         <p class="text-sm font-semibold">Chưa có dữ liệu tính toán</p>
                     </div>
                 </div>
-
                 <div class="absolute bottom-4 right-4 bg-white/95 backdrop-blur p-4 rounded-2xl shadow-xl border border-slate-100 flex flex-col items-center scale-[0.85] origin-bottom-right z-20">
                     <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tỷ Lệ Lấp Đầy</div>
                     <div class="relative flex items-center justify-center w-20 h-20">
@@ -124,378 +167,404 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
+<div id="warning-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full flex flex-col max-h-[90vh]">
+        <div class="bg-amber-50 border-b border-amber-100 p-4 flex items-center gap-3 rounded-t-2xl">
+            <span class="text-3xl">⚠️</span>
+            <div>
+                <h3 class="font-black text-amber-800 text-lg">Phân Tích Kết Quả</h3>
+                <p class="text-[11px] text-amber-700 font-bold uppercase tracking-wide">Cảnh báo tồn pallet & không tương thích</p>
+            </div>
+        </div>
+        <div class="p-5 overflow-y-auto custom-scrollbar flex-grow flex flex-col gap-4">
+            <ul id="modal-warnings-list" class="space-y-2 text-sm font-bold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100"></ul>
+        </div>
+        <div class="bg-slate-50 border-t border-slate-100 p-4 flex justify-end gap-3 rounded-b-2xl">
+            <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-100">Đóng</button>
+            <button onclick="confirmCalculation()" class="px-5 py-2.5 rounded-xl font-black text-white bg-blue-600 shadow-md hover:bg-blue-700">Xác Nhận & Hiển Thị</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // --- CƠ SỞ DỮ LIỆU ĐẦY ĐỦ 47 SẢN PHẨM ---
     const DATABASE = [
-        { id: 'SP1', name: "Bamifen", boxesPerCarton: 680, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP2', name: "Calcium", boxesPerCarton: 225, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP3', name: "CandeKern 8", boxesPerCarton: 72, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
-        { id: 'SP4', name: "Codalgin Forte", boxesPerCarton: 192, caps: { 'Pallet L': 54, 'Pallet N': 27, 'Pallet T1': 35, 'Pallet T2': 35, 'Pallet 1A': 54 } },
-        { id: 'SP5', name: "Colchicina", boxesPerCarton: 100, caps: { 'Pallet L': 100, 'Pallet N': 48, 'Pallet T1': 45, 'Pallet T2': 60, 'Pallet 1A': 100 } },
-        { id: 'SP6', name: "DogmaKern", boxesPerCarton: 192, caps: { 'Pallet L': 84, 'Pallet N': 25, 'Pallet T1': 50, 'Pallet T2': 34, 'Pallet 1A': 80 } },
-        { id: 'SP7', name: "Folihem", boxesPerCarton: 175, caps: { 'Pallet L': 55, 'Pallet N': 25, 'Pallet 1A': 55 } },
-        { id: 'SP8', name: "Lovarem", boxesPerCarton: 760, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP9', name: "Oprymea0.26", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP10', name: "Oprymea0.52", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP11', name: "Remebentin 100", boxesPerCarton: 320, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP12', name: "Sadapron 100", boxesPerCarton: 440, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP13', name: "Venokern", boxesPerCarton: 72, caps: { 'Pallet L': 120, 'Pallet N': 60, 'Pallet 1A': 120 } },
-        { id: 'SP14', name: "Auricularum", boxesPerCarton: 196, caps: { 'Pallet L': 31, 'Pallet N': 10, 'Pallet 1A': 25 } },
-        { id: 'SP15', name: "CandeKern 16 (2 vỉ x 14 viên)", boxesPerCarton: 72, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
-        { id: 'SP16', name: "Domreme", boxesPerCarton: 400, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP17', name: "Famopsin", boxesPerCarton: 360, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP18', name: "KernHistine 16", boxesPerCarton: 56, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
-        { id: 'SP19', name: "KernHistine 8", boxesPerCarton: 56, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
-        { id: 'SP20', name: "Klevaflu", boxesPerCarton: 48, caps: { 'Pallet L': 55, 'Pallet N': 25, 'Pallet 1A': 55 } },
-        { id: 'SP21', name: "Nazofix 0.05%", boxesPerCarton: 80, caps: { 'Pallet L': 60, 'Pallet N': 30, 'Pallet 1A': 60 } },
-        { id: 'SP22', name: "Propain", boxesPerCarton: 140, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP23', name: "Propain Syrup (Hộp 01 chai)", boxesPerCarton: 64, caps: { 'Pallet L': 32, 'Pallet N': 15, 'Pallet 1A': 32 } },
-        { id: 'SP24', name: "Remeclar 250", boxesPerCarton: 500, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP25', name: "Remeclar 500", boxesPerCarton: 380, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP26', name: "Sadapron 300", boxesPerCarton: 460, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP27', name: "Calcium (Hộp 10 vỉ x 10 viên)", boxesPerCarton: 225, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP28', name: "Clomedin 100 (Hộp 5 vỉ x 10 viên)", boxesPerCarton: 465, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP29', name: "Clomedin 25 (Hộp 5 vỉ x 10 viên)", boxesPerCarton: 600, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP30', name: "Cypdicar (Hộp 03 vỉ x10 viên )", boxesPerCarton: 880, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP31', name: "Cyplosart 50 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 880, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP32', name: "Diclowal (Hộp 2 vỉ x 5 viên đặt)", boxesPerCarton: 255, caps: { 'Pallet L': 30, 'Pallet N': 10, 'Pallet 1A': 25 } },
-        { id: 'SP33', name: "Elpesom 50 µg/dose (Hộp 1 chai)", boxesPerCarton: 288, caps: { 'Pallet L': 32, 'Pallet N': 15, 'Pallet 1A': 32 } },
-        { id: 'SP34', name: "Famopsin (Hộp 10 vỉ x 10 viên)", boxesPerCarton: 360, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
-        { id: 'SP35', name: "Gorsyta (Hộp/08 vỉ X 07 viên)", boxesPerCarton: 64, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP36', name: "Klevator", boxesPerCarton: 448, caps: { 'Pallet L': 31, 'Pallet N': 10, 'Pallet 1A': 25 } },
-        { id: 'SP37', name: "Nazofix 0.05% (Hộp 1 chai x 18g)", boxesPerCarton: 80, caps: { 'Pallet L': 60, 'Pallet N': 30, 'Pallet 1A': 60 } },
-        { id: 'SP38', name: "Olimestra10 (Hộp 2 vỉ x15 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP39', name: "Olimestra20 (Hộp/2 vỉ X 15 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP40', name: "Olimestra20 (Hộp/2 vỉ X 14 viên)", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP41', name: "Oprymea 0.26 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP42', name: "Oprymea 0.52 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP43', name: "Terminus (Hộp 1 chai x 30ml)", boxesPerCarton: 100, caps: { 'Pallet L': 40, 'Pallet N': 20, 'Pallet 1A': 40 } },
-        { id: 'SP44', name: "Torendo Q1 (Hộp/03 vỉ X 10 viên)", boxesPerCarton: 160, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP45', name: "Torendo Q2 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP46', name: "Yradan 10 (Hộp 03 vỉ x 10 viên)", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
-        { id: 'SP47', name: "Yradan 5 (Hộp 03 vỉ X 10 viên)", boxesPerCarton: 160, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } }
+        { id: 'SP1', name: "Sản Phẩm 1", boxesPerCarton: 680, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP2', name: "Sản Phẩm 2", boxesPerCarton: 225, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP3', name: "Sản Phẩm 3", boxesPerCarton: 72, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
+        { id: 'SP4', name: "Sản Phẩm 4", boxesPerCarton: 192, caps: { 'Pallet L': 54, 'Pallet N': 27, 'Pallet T1': 35, 'Pallet T2': 35, 'Pallet 1A': 54 } },
+        { id: 'SP5', name: "Sản Phẩm 5", boxesPerCarton: 100, caps: { 'Pallet L': 100, 'Pallet N': 48, 'Pallet T1': 45, 'Pallet T2': 60, 'Pallet 1A': 100 } },
+        { id: 'SP6', name: "Sản Phẩm 6", boxesPerCarton: 192, caps: { 'Pallet L': 84, 'Pallet N': 25, 'Pallet T1': 50, 'Pallet T2': 34, 'Pallet 1A': 80 } },
+        { id: 'SP7', name: "Sản Phẩm 7", boxesPerCarton: 175, caps: { 'Pallet L': 55, 'Pallet N': 25, 'Pallet 1A': 55 } },
+        { id: 'SP8', name: "Sản Phẩm 8", boxesPerCarton: 760, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP9', name: "Sản Phẩm 9", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP10', name: "Sản Phẩm 10", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP11', name: "Sản Phẩm 11", boxesPerCarton: 320, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP12', name: "Sản Phẩm 12", boxesPerCarton: 440, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP13', name: "Sản Phẩm 13", boxesPerCarton: 72, caps: { 'Pallet L': 120, 'Pallet N': 60, 'Pallet 1A': 120 } },
+        { id: 'SP14', name: "Sản Phẩm 14", boxesPerCarton: 196, caps: { 'Pallet L': 31, 'Pallet N': 10, 'Pallet 1A': 25 } },
+        { id: 'SP15', name: "Sản Phẩm 15", boxesPerCarton: 72, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
+        { id: 'SP16', name: "Sản Phẩm 16", boxesPerCarton: 400, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP17', name: "Sản Phẩm 17", boxesPerCarton: 360, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP18', name: "Sản Phẩm 18", boxesPerCarton: 56, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
+        { id: 'SP19', name: "Sản Phẩm 19", boxesPerCarton: 56, caps: { 'Pallet L': 182, 'Pallet N': 92, 'Pallet T1': 91, 'Pallet T2': 91, 'Pallet 1A': 182 } },
+        { id: 'SP20', name: "Sản Phẩm 20", boxesPerCarton: 48, caps: { 'Pallet L': 55, 'Pallet N': 25, 'Pallet 1A': 55 } },
+        { id: 'SP21', name: "Sản Phẩm 21", boxesPerCarton: 80, caps: { 'Pallet L': 60, 'Pallet N': 30, 'Pallet 1A': 60 } },
+        { id: 'SP22', name: "Sản Phẩm 22", boxesPerCarton: 140, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP23', name: "Sản Phẩm 23", boxesPerCarton: 64, caps: { 'Pallet L': 32, 'Pallet N': 15, 'Pallet 1A': 32 } },
+        { id: 'SP24', name: "Sản Phẩm 24", boxesPerCarton: 500, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP25', name: "Sản Phẩm 25", boxesPerCarton: 380, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP26', name: "Sản Phẩm 26", boxesPerCarton: 460, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP27', name: "Sản Phẩm 27", boxesPerCarton: 225, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP28', name: "Sản Phẩm 28", boxesPerCarton: 465, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP29', name: "Sản Phẩm 29", boxesPerCarton: 600, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP30', name: "Sản Phẩm 30", boxesPerCarton: 880, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP31', name: "Sản Phẩm 31", boxesPerCarton: 880, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP32', name: "Sản Phẩm 32", boxesPerCarton: 255, caps: { 'Pallet L': 30, 'Pallet N': 10, 'Pallet 1A': 25 } },
+        { id: 'SP33', name: "Sản Phẩm 33", boxesPerCarton: 288, caps: { 'Pallet L': 32, 'Pallet N': 15, 'Pallet 1A': 32 } },
+        { id: 'SP34', name: "Sản Phẩm 34", boxesPerCarton: 360, caps: { 'Pallet L': 25, 'Pallet N': 15, 'Pallet T1': 10, 'Pallet T2': 12, 'Pallet 1A': 20 } },
+        { id: 'SP35', name: "Sản Phẩm 35", boxesPerCarton: 64, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP36', name: "Sản Phẩm 36", boxesPerCarton: 448, caps: { 'Pallet L': 31, 'Pallet N': 10, 'Pallet 1A': 25 } },
+        { id: 'SP37', name: "Sản Phẩm 37", boxesPerCarton: 80, caps: { 'Pallet L': 60, 'Pallet N': 30, 'Pallet 1A': 60 } },
+        { id: 'SP38', name: "Sản Phẩm 38", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP39', name: "Sản Phẩm 39", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP40', name: "Sản Phẩm 40", boxesPerCarton: 128, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP41', name: "Sản Phẩm 41", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP42', name: "Sản Phẩm 42", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP43', name: "Sản Phẩm 43", boxesPerCarton: 100, caps: { 'Pallet L': 40, 'Pallet N': 20, 'Pallet 1A': 40 } },
+        { id: 'SP44', name: "Sản Phẩm 44", boxesPerCarton: 160, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP45', name: "Sản Phẩm 45", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP46', name: "Sản Phẩm 46", boxesPerCarton: 120, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } },
+        { id: 'SP47', name: "Sản Phẩm 47", boxesPerCarton: 160, caps: { 'Pallet L': 50, 'Pallet N': 25, 'Pallet 1A': 40 } }
     ];
 
-    const PL_TYPES = [
-        { id: 'Pallet L', code: 'Pallet L' },
-        { id: 'Pallet N', code: 'Pallet N' },
-        { id: 'Pallet T1', code: 'Pallet T1' },
-        { id: 'Pallet T2', code: 'Pallet T2' },
-        { id: 'Pallet 1A', code: 'Pallet 1A' }
-    ];
-
+    const PL_TYPES = ['Pallet L', 'Pallet N', 'Pallet T1', 'Pallet T2', 'Pallet 1A'];
     let activeRows = [];
     let rowCounter = 0;
     const MAX_ROWS = 5;
+    let isInventoryModeEnabled = true;
+    let pendingResultState = null; 
 
-    // Khởi tạo
-    function init() {
-        addProductRow(); 
-        document.addEventListener('click', (e) => {
-            activeRows.forEach(id => {
-                const wrap = document.getElementById(`search-wrap-${id}`);
-                if (wrap && !wrap.contains(e.target)) hideDropdown(id);
-            });
+    // Hàm hiển thị Toast thông báo chuyên nghiệp
+    function showToast(title, message) {
+        const toast = document.createElement('div');
+        toast.className = `bg-white border-l-4 border-amber-500 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] p-4 flex items-start gap-3 transform transition-all duration-300 translate-x-full opacity-0 w-[320px] pointer-events-auto`;
+        toast.innerHTML = `
+            <div class="text-xl leading-none">⚠️</div>
+            <div>
+                <h4 class="text-[13px] font-black text-slate-800 mb-0.5">${title}</h4>
+                <p class="text-[11px] font-semibold text-slate-500 leading-tight">${message}</p>
+            </div>
+        `;
+        document.getElementById('toast-container').appendChild(toast);
+        
+        // Tạo hiệu ứng trượt vào
+        requestAnimationFrame(() => {
+            toast.classList.remove('translate-x-full', 'opacity-0');
         });
+
+        // Tự động trượt ra và xóa
+        setTimeout(() => {
+            toast.classList.add('translate-x-full', 'opacity-0');
+            setTimeout(() => toast.remove(), 400);
+        }, 4000);
     }
 
-    // --- QUẢN LÝ DÒNG NHẬP LIỆU (DOM DYNAMIC) ---
+    function init() { 
+        addProductRow(); 
+        document.addEventListener('click', (e) => { 
+            activeRows.forEach(id => { 
+                const wrap = document.getElementById(`search-wrap-${id}`); 
+                if (wrap && !wrap.contains(e.target)) hideDropdown(id); 
+            }); 
+        }); 
+    }
+
+    function resetDataWithoutReload() {
+        PL_TYPES.forEach(pl => {
+            document.getElementById(`pool-${pl}`).value = "";
+            const remEl = document.getElementById(`rem-${pl}`);
+            if (remEl) remEl.classList.add('hidden');
+        });
+
+        document.getElementById('product-rows-container').innerHTML = '';
+        activeRows = [];
+        rowCounter = 0;
+        
+        addProductRow();
+
+        document.getElementById('dock-view').innerHTML = '<div class="w-full h-full flex flex-col items-center justify-center text-slate-300 py-10"><svg class="h-16 w-16 mb-2 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg><p class="text-sm font-semibold">Chưa có dữ liệu tính toán</p></div>';
+        document.getElementById('res-total-pallets').innerText = '0';
+        document.getElementById('res-efficiency-text').innerText = '0%';
+        document.getElementById('res-eff-badge').innerText = '0%';
+        document.getElementById('efficiency-circle').setAttribute('stroke-dasharray', '0, 100');
+        document.getElementById('res-packing-list').innerText = '-';
+        
+        updateUIState();
+    }
+
+    function toggleInventoryMode() {
+        isInventoryModeEnabled = document.getElementById('toggle-inventory-mode').checked;
+        document.getElementById('inventory-inputs-container').classList.toggle('opacity-40', !isInventoryModeEnabled);
+        resetDataWithoutReload();
+    }
+
+    function clearAllData() { 
+        if (confirm("Xóa tất cả dữ liệu đã nhập?")) {
+            resetDataWithoutReload();
+        } 
+    }
+
     function addProductRow() {
         if (activeRows.length >= MAX_ROWS) return;
-        
         rowCounter++;
         const id = rowCounter;
         activeRows.push(id);
         const index = activeRows.length;
-        const zIndex = 50 - index;
-
         const rowHTML = `
-            <div id="row-${id}" class="bg-white border border-slate-200 rounded-xl p-4 relative transition-all" style="z-index: ${zIndex}">
+            <div id="row-${id}" class="bg-white border border-slate-200 rounded-xl p-4 relative transition-all" style="z-index: ${50 - index}">
                 <div class="flex justify-between items-center mb-3">
-                    <span class="row-label text-[11px] font-black text-blue-700 bg-blue-100 px-2.5 py-1 rounded uppercase tracking-wider">Sản phẩm #${index}</span>
-                    <button onclick="removeRow(${id})" class="text-xs text-red-500 hover:text-red-700 font-bold bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded flex items-center gap-1 transition-colors" title="Xóa">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
+                    <span class="row-label text-[11px] font-black text-blue-700 bg-blue-100 px-2.5 py-1 rounded">Sản phẩm #${index}</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="moveRowUp(${id})" class="p-1.5 bg-white rounded-lg border hover:bg-slate-50 transition-colors">↑</button>
+                        <button onclick="moveRowDown(${id})" class="p-1.5 bg-white rounded-lg border hover:bg-slate-50 transition-colors">↓</button>
+                        <button onclick="removeRow(${id})" class="p-1.5 bg-red-50 text-red-500 rounded-lg border hover:bg-red-100 transition-colors">✕</button>
+                    </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
                     <div class="md:col-span-6 relative" id="search-wrap-${id}">
-                        <label class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Tên thuốc</label>
-                        <input type="text" id="search-${id}" placeholder="Gõ để tìm..." class="w-full bg-slate-50 px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 focus:bg-white outline-none font-bold text-slate-700 transition-all" autocomplete="off" onfocus="showDropdown(${id}); filterProducts(${id})" oninput="filterProducts(${id})">
+                        <label class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Tên sản phẩm</label>
+                        <input type="text" id="search-${id}" autocomplete="off" placeholder="Gõ để tìm..." class="w-full bg-slate-50 px-3 py-2 text-sm rounded-lg border outline-none font-bold" onfocus="showDropdown(${id}); filterProducts(${id})" oninput="filterProducts(${id})">
                         <input type="hidden" id="select-${id}">
-                        <ul id="dropdown-${id}" class="absolute w-full bg-white border border-slate-200 rounded-lg shadow-xl mt-1 max-h-48 overflow-y-auto hidden custom-scrollbar divide-y divide-slate-50"></ul>
+                        <ul id="dropdown-${id}" class="absolute w-full bg-white border rounded-lg shadow-xl mt-1 max-h-48 overflow-y-auto hidden z-50"></ul>
+                        <div id="spec-${id}" class="mt-1.5 text-[10.5px] font-bold text-emerald-600 h-4"></div>
                     </div>
                     <div class="md:col-span-3">
                         <label class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Số hộp</label>
-                        <input type="number" id="boxes-${id}" oninput="calcCartons(${id})" onkeypress="if(event.key==='Enter') runOptimization()" placeholder="VD: 1000" class="w-full bg-slate-50 px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 focus:bg-white outline-none font-black text-blue-700 transition-all">
-                        <div id="breakdown-${id}" class="mt-1 text-[10.5px] font-semibold text-blue-600 leading-tight break-words whitespace-normal min-h-[16px]"></div>
+                        <input type="number" id="boxes-${id}" autocomplete="off" placeholder="0" oninput="calcCartons(${id})" class="w-full bg-slate-50 px-3 py-2 text-sm rounded-lg border font-black text-blue-700 outline-none">
+                        <div id="breakdown-${id}" class="mt-1.5 text-[10.5px] font-semibold text-blue-600"></div>
                     </div>
                     <div class="md:col-span-3">
                         <label class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Số thùng</label>
-                        <input type="number" id="cartons-${id}" oninput="clearBoxes(${id})" onkeypress="if(event.key==='Enter') runOptimization()" placeholder="0" class="w-full bg-slate-50 px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 focus:bg-white outline-none font-black text-slate-800 transition-all">
+                        <input type="number" id="cartons-${id}" autocomplete="off" placeholder="0" oninput="clearBoxes(${id})" class="w-full bg-slate-50 px-3 py-2 text-sm rounded-lg border font-black outline-none">
                     </div>
                 </div>
-
-                <div class="mt-3 pt-3 border-t border-slate-100">
-                    <h5 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Cấu hình Pallet</h5>
-                    <div id="config-${id}" class="flex flex-wrap gap-2">
-                        <span class="text-xs text-slate-400 italic">Chọn sản phẩm để hiển thị cấu hình...</span>
-                    </div>
+                <div class="mt-3 pt-3 border-t">
+                    <div id="config-${id}" class="flex flex-wrap gap-2"></div>
                 </div>
-            </div>
-        `;
-        
+                <div id="status-${id}" class="mt-3 text-[11px] font-bold hidden px-3 py-2 rounded"></div>
+            </div>`;
         document.getElementById('product-rows-container').insertAdjacentHTML('beforeend', rowHTML);
         updateUIState();
     }
 
-    function removeRow(id) {
-        if (activeRows.length === 1) return; // Không cho xóa nếu chỉ còn 1
-        document.getElementById(`row-${id}`).remove();
-        activeRows = activeRows.filter(rId => rId !== id);
-        
-        // Đánh số lại
-        activeRows.forEach((rId, index) => {
-            const label = document.querySelector(`#row-${rId} .row-label`);
-            if(label) label.innerText = `Sản phẩm #${index + 1}`;
-        });
-        updateUIState();
-    }
+    function processOptimization() {
+        let validRows = [];
+        let globalWarnings = [];
+        let initialPool = {};
+        PL_TYPES.forEach(pl => initialPool[pl] = parseInt(document.getElementById(`pool-${pl}`).value) || 0);
 
-    function clearAllData() {
-        if (confirm("Xóa toàn bộ dữ liệu đang nhập?")) {
-            document.getElementById('product-rows-container').innerHTML = '';
-            activeRows = [];
-            rowCounter = 0;
-            addProductRow();
-        }
-    }
+        activeRows.forEach(id => {
+            const pId = document.getElementById(`select-${id}`).value;
+            const ct = parseInt(document.getElementById(`cartons-${id}`).value);
+            const rowEl = document.getElementById(`row-${id}`);
+            const statusEl = document.getElementById(`status-${id}`);
+            
+            rowEl.classList.remove('row-incompatible');
+            statusEl.classList.add('hidden');
 
-    function updateUIState() {
-        const btnAdd = document.getElementById('add-product-btn');
-        const warn = document.getElementById('max-item-warning');
-        if (activeRows.length >= MAX_ROWS) {
-            btnAdd.style.display = 'none';
-            warn.classList.remove('hidden');
-        } else {
-            btnAdd.style.display = 'flex';
-            warn.classList.add('hidden');
-        }
-    }
-
-    // --- AUTOCOMPLETE & TÍNH TOÁN DỮ LIỆU TỪNG DÒNG ---
-    function filterProducts(id) {
-        const kw = document.getElementById(`search-${id}`).value.toLowerCase();
-        const filtered = DATABASE.filter(p => p.name.toLowerCase().includes(kw));
-        const ul = document.getElementById(`dropdown-${id}`);
-        ul.innerHTML = '';
-        
-        if(!filtered.length) {
-            ul.innerHTML = '<li class="p-3 text-xs text-slate-400 italic text-center">Không tìm thấy</li>';
-        } else {
-            filtered.forEach(p => {
-                const safeName = p.name.replace(/'/g, "\\'");
-                ul.innerHTML += `
-                    <li onclick="selectProduct(${id}, '${p.id}', '${safeName}')" class="p-2.5 hover:bg-blue-50 cursor-pointer text-xs font-bold text-slate-700">
-                        ${p.name} <span class="text-[10px] text-slate-400 font-normal block mt-0.5">QC: ${p.boxesPerCarton} hộp/thùng</span>
-                    </li>`;
-            });
-        }
-        showDropdown(id);
-    }
-
-    function showDropdown(id) { 
-        activeRows.forEach(r => { if(r!==id) hideDropdown(r); });
-        document.getElementById(`dropdown-${id}`).classList.remove('hidden'); 
-    }
-    function hideDropdown(id) { document.getElementById(`dropdown-${id}`).classList.add('hidden'); }
-
-    function selectProduct(id, prodId, prodName) {
-        document.getElementById(`select-${id}`).value = prodId;
-        document.getElementById(`search-${id}`).value = prodName;
-        hideDropdown(id);
-        renderConfigs(id, prodId);
-        calcCartons(id);
-    }
-
-    // Render Cấu hình Pallet to (w-110px), 3 dòng theo yêu cầu 5
-    function renderConfigs(id, prodId) {
-        const container = document.getElementById(`config-${id}`);
-        const product = DATABASE.find(p => p.id === prodId);
-        if (!product) return;
-
-        let html = '';
-        PL_TYPES.forEach(pl => {
-            const cap = product.caps[pl.id];
-            const hasData = cap && cap > 0;
-            // Mặc định bật Pallet L, N, T1 nếu có data
-            const checked = hasData && ['Pallet L', 'Pallet N', 'Pallet T1'].includes(pl.id) ? 'checked' : '';
-            const disabled = hasData ? '' : 'disabled';
-            const bgClass = hasData ? 'border-blue-400 bg-blue-50 shadow-sm' : 'border-slate-200 bg-white opacity-60';
-            const capText = hasData ? `<span class="text-blue-700">${cap}</span>` : `<span class="text-red-400">-</span>`;
-
-            html += `
-            <div class="border rounded-[10px] py-2 px-1 w-[100px] flex flex-col items-center justify-between gap-1.5 transition-all ${bgClass}">
-                <span class="font-bold text-[12px] ${hasData ? 'text-blue-900' : 'text-slate-500'} tracking-tight">${pl.id}</span>
+            if (pId && ct > 0) {
+                const product = DATABASE.find(p => p.id === pId);
                 
-                <label class="relative inline-flex items-center ${hasData ? 'cursor-pointer' : 'cursor-not-allowed'} scale-90">
-                    <input type="checkbox" id="toggle-${id}-${pl.id}" class="toggle-checkbox sr-only peer" ${checked} ${disabled}>
-                    <div class="toggle-label w-10 h-5 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
-                </label>
+                let hasPossibleStock = false;
+                PL_TYPES.forEach(name => {
+                    const isToggled = document.getElementById(`toggle-${id}-${name.replace(' ', '-')}`)?.checked;
+                    if (isToggled && (!isInventoryModeEnabled || initialPool[name] > 0)) {
+                        hasPossibleStock = true;
+                    }
+                });
 
-                <span class="text-[10px] font-bold ${hasData ? 'text-slate-600' : 'text-slate-400'}">Sức chứa: ${capText}</span>
-            </div>`;
+                if (isInventoryModeEnabled && !hasPossibleStock) {
+                    rowEl.classList.add('row-incompatible');
+                    statusEl.className = "mt-3 text-[11px] font-bold px-3 py-2 rounded bg-red-50 border border-red-200 text-red-600 block";
+                    statusEl.innerHTML = `⚠️ Sản phẩm ${product.name} pallet không tương thích.`;
+                    globalWarnings.push(`<b>${product.name}:</b> Không có loại Pallet nào tương thích còn trong kho.`);
+                } else {
+                    validRows.push({id, pId, ct});
+                }
+            }
         });
-        container.innerHTML = html;
-    }
 
-    function calcCartons(id) {
-        const prodId = document.getElementById(`select-${id}`).value;
-        const boxesStr = document.getElementById(`boxes-${id}`).value;
-        const cartonInp = document.getElementById(`cartons-${id}`);
-        const breakDiv = document.getElementById(`breakdown-${id}`);
-        
-        if (!prodId || !boxesStr) { cartonInp.value = ""; breakDiv.innerHTML = ""; return; }
-        
-        const product = DATABASE.find(p => p.id === prodId);
-        const boxes = parseInt(boxesStr);
-        if (boxes <= 0) return;
+        if (validRows.length === 0 && globalWarnings.length === 0) return alert("Vui lòng nhập liệu!");
 
-        const full = Math.floor(boxes / product.boxesPerCarton);
-        const rem = boxes % product.boxesPerCarton;
-        
-        cartonInp.value = full + (rem > 0 ? 1 : 0);
-        
-        // Yêu cầu 6: Hiển thị đầy đủ, tự xuống dòng
-        if(rem === 0) {
-            breakDiv.innerHTML = `= ${full} thùng chẵn`;
+        const result = calculateDistribution(validRows, initialPool);
+        result.globalWarnings = [...globalWarnings, ...result.globalWarnings];
+
+        if (result.globalWarnings.length > 0) {
+            showModal(result);
         } else {
-            breakDiv.innerHTML = `= ${full} thùng + 1 thùng lẻ (<span class="font-black text-red-500">${rem} hộp</span>)`;
+            renderResult(result);
         }
     }
 
-    function clearBoxes(id) {
-        document.getElementById(`boxes-${id}`).value = "";
-        document.getElementById(`breakdown-${id}`).innerHTML = "";
-    }
-
-    // --- THUẬT TOÁN TỐI ƯU HÓA (Yêu cầu 8, 9) ---
-    function runOptimization() {
-        let totalGlobalCartons = 0;
-        let totalGlobalCapacity = 0;
-        let totalGlobalPallets = 0;
+    function calculateDistribution(validRows, initialPool) {
+        let pool = { ...initialPool };
         let finalDockHtml = "";
         let finalPackingList = {};
+        let totalCartonsShelved = 0;
+        let totalCapUsed = 0;
         let palletIdx = 1;
-        let hasError = false;
+        let rowStatuses = [];
+        let globalWarnings = [];
 
-        // Quét kiểm tra lỗi (Yêu cầu 9)
-        let validRowsCount = 0;
-        for (let i = 0; i < activeRows.length; i++) {
-            const id = activeRows[i];
-            const prodId = document.getElementById(`select-${id}`).value;
-            const cartonsStr = document.getElementById(`cartons-${id}`).value;
-            
-            // Bỏ qua nếu dòng trống hoàn toàn
-            if (!prodId && !cartonsStr) continue;
+        validRows.forEach(row => {
+            const product = DATABASE.find(p => p.id === row.pId);
+            let remaining = row.ct;
+            let usedRow = {};
 
-            if (!prodId) { alert(`Sản phẩm #${i+1}: Vui lòng chọn Tên thuốc!`); hasError = true; break; }
-            const cartons = parseInt(cartonsStr);
-            if (!cartons || cartons <= 0) { alert(`Sản phẩm #${i+1}: Vui lòng nhập số lượng hợp lệ!`); hasError = true; break; }
-            validRowsCount++;
-        }
-        if (hasError) return;
-        if (validRowsCount === 0) { alert("Vui lòng nhập liệu ít nhất 1 sản phẩm để tính toán!"); return; }
+            let allowed = PL_TYPES.map(name => ({
+                name, cap: product.caps[name] || 0, 
+                isEnabled: document.getElementById(`toggle-${row.id}-${name.replace(' ', '-')}`)?.checked
+            })).filter(p => p.cap > 0 && p.isEnabled).sort((a,b) => b.cap - a.cap);
 
-        // Bắt đầu tính toán RIÊNG TỪNG SẢN PHẨM
-        activeRows.forEach(id => {
-            const prodId = document.getElementById(`select-${id}`).value;
-            const cartons = parseInt(document.getElementById(`cartons-${id}`).value);
-            if (!prodId || !cartons) return;
-
-            const product = DATABASE.find(p => p.id === prodId);
-            totalGlobalCartons += cartons;
-
-            // Lấy các Pallet ĐƯỢC BẬT CHO SẢN PHẨM NÀY & Sắp xếp giảm dần (Lớn nhất tính trước)
-            let activePallets = PL_TYPES.map(pl => {
-                const toggle = document.getElementById(`toggle-${id}-${pl.id}`);
-                return { id: pl.id, code: pl.code, cap: product.caps[pl.id] || 0, active: toggle ? toggle.checked : false };
-            }).filter(p => p.active && p.cap > 0).sort((a, b) => b.cap - a.cap);
-
-            if (activePallets.length === 0) {
-                alert(`Sản phẩm "${product.name}" chưa bật Pallet nào có sức chứa!`);
-                return; // Có thể sẽ break luồng, nhưng trong forEach nó chỉ return function con
-            }
-
-            let remaining = cartons;
-            
-            // Thuật toán: Ưu tiên Pallet lớn nhất trước.
             while (remaining > 0) {
-                let selectedPallet = null;
+                let available = isInventoryModeEnabled ? allowed.filter(p => pool[p.name] > 0) : allowed;
+                if (available.length === 0) break;
 
-                // Tìm 1 Pallet NHỎ NHẤT có khả năng chứa TRỌN phần còn lại (để không lãng phí pallet to)
-                for (let i = activePallets.length - 1; i >= 0; i--) {
-                    if (activePallets[i].cap >= remaining) {
-                        selectedPallet = activePallets[i];
-                        break;
-                    }
-                }
+                let actCapable = available.filter(p => p.cap >= remaining);
+                let selected = actCapable.length > 0 ? actCapable[actCapable.length - 1] : available[0];
 
-                // Nếu không có cái nào chứa trọn được (số lượng quá lớn) -> Dùng cái LỚN NHẤT
-                if (!selectedPallet) {
-                    selectedPallet = activePallets[0]; 
-                }
+                if (isInventoryModeEnabled) pool[selected.name]--;
+                const fill = Math.min(remaining, selected.cap);
+                remaining -= selected.cap;
 
-                const key = `${selectedPallet.code} (${product.name})`;
+                const key = `${selected.name} (${product.name})`;
                 finalPackingList[key] = (finalPackingList[key] || 0) + 1;
+                usedRow[selected.name] = (usedRow[selected.name] || 0) + 1;
                 
-                // Vẽ Pallet ra
-                const fillAmount = Math.min(remaining, selectedPallet.cap);
-                finalDockHtml += renderPalletBox(selectedPallet.code, product.name, fillAmount, selectedPallet.cap, palletIdx++);
-                
-                totalGlobalCapacity += selectedPallet.cap;
-                totalGlobalPallets++;
-                remaining -= selectedPallet.cap;
+                finalDockHtml += renderPalletBox(selected.name, product.name, fill, selected.cap, palletIdx++);
+                totalCartonsShelved += fill;
+                totalCapUsed += selected.cap;
             }
+
+            if (remaining > 0) {
+                globalWarnings.push(`<b>${product.name}:</b> Thiếu pallet, tràn <b>${remaining}</b> thùng.`);
+                finalDockHtml += `<div class="flex flex-col items-center w-[86px]"><div class="text-[10px] font-black text-red-400 mb-1">TRÀN</div><div class="overflow-box"><span class="text-[14px] font-black text-red-600">${remaining}</span><span class="text-[8px] font-bold text-red-400 uppercase">Thùng</span></div><div class="mt-1 text-[9px] font-bold text-red-600 text-center leading-tight">${product.name}</div></div>`;
+            }
+            rowStatuses.push({ id: row.id, remaining, used: usedRow });
         });
 
-        // Ghi Kết quả ra giao diện
-        document.getElementById('dock-view').innerHTML = finalDockHtml;
-        document.getElementById('res-total-pallets').innerText = totalGlobalPallets;
-        
-        const eff = totalGlobalCapacity > 0 ? Math.round((totalGlobalCartons / totalGlobalCapacity) * 100) : 0;
+        return { finalDockHtml, finalPackingList, totalCartonsShelved, totalCapUsed, palletIdx, rowStatuses, globalWarnings, finalPool: pool };
+    }
+
+    function renderResult(result) {
+        document.getElementById('dock-view').innerHTML = result.finalDockHtml || '<div class="w-full h-full flex flex-col items-center justify-center text-slate-300 py-10"><p class="text-sm font-semibold">Chưa có dữ liệu tính toán</p></div>';
+        document.getElementById('res-total-pallets').innerText = result.palletIdx > 1 ? result.palletIdx - 1 : 0;
+        const eff = result.totalCapUsed > 0 ? Math.round((result.totalCartonsShelved / result.totalCapUsed) * 100) : 0;
         document.getElementById('res-efficiency-text').innerText = eff + "%";
         document.getElementById('res-eff-badge').innerText = eff + "%";
         document.getElementById('efficiency-circle').setAttribute('stroke-dasharray', `${eff}, 100`);
+        document.getElementById('res-packing-list').innerText = Object.entries(result.finalPackingList).map(([k,v]) => `${v}x ${k}`).join("\n") || "-";
 
-        let packingArr = [];
-        for (const [key, count] of Object.entries(finalPackingList)) packingArr.push(`${count}x ${key}`);
-        document.getElementById('res-packing-list').innerText = packingArr.join("\n");
+        if (isInventoryModeEnabled) {
+            PL_TYPES.forEach(pl => {
+                const el = document.getElementById(`rem-${pl}`);
+                el.innerText = `Còn: ${result.finalPool[pl]}`;
+                el.classList.remove('hidden');
+            });
+        }
+
+        result.rowStatuses.forEach(st => {
+            const el = document.getElementById(`status-${st.id}`);
+            el.classList.remove("hidden");
+            if (st.remaining > 0) {
+                el.className = "mt-3 text-[11px] font-bold px-3 py-2 rounded bg-red-50 border border-red-200 text-red-600 block";
+                el.innerHTML = `⚠️ Tràn: ${st.remaining} thùng không có Pallet!`;
+            } else {
+                el.className = "mt-3 text-[11px] font-bold px-3 py-2 rounded bg-emerald-50 border border-emerald-200 text-emerald-700 block";
+                el.innerHTML = `✅ Đã xếp xong.`;
+            }
+        });
     }
 
-    // Yêu cầu 7 & 12: Icon Pallet nhỏ hơn 5% (w-[76px]), tên SP chính giữa
-    function renderPalletBox(code, prodName, fill, max, idx) {
-    const perc = (fill / max) * 100;
-    return `
-        <div class="flex flex-col items-center w-[86px]"> 
-            <div class="text-[10px] font-black text-slate-400 mb-1">#${String(idx).padStart(2, '0')}</div>
-            <div class="pallet-box">
-                <div class="pallet-icon-text" title="${prodName}">${prodName}</div>
-                <div class="pallet-fill" style="height: ${perc}%"></div>
-            </div>
-            <div class="pallet-base"><i></i><i></i><i></i></div>
-            <div class="mt-1.5 text-center w-full">
-                <div class="text-[9px] font-black text-blue-800 bg-blue-50 border border-blue-200 rounded px-1 py-0.5 tracking-tighter uppercase mb-1 whitespace-nowrap">${code}</div>
-                <div class="text-[11px] font-black text-slate-700">${fill}/${max}</div>
-            </div>
-        </div>`;
-}
+    function showModal(result) {
+        pendingResultState = result;
+        const ul = document.getElementById('modal-warnings-list');
+        ul.innerHTML = result.globalWarnings.length > 0 ? result.globalWarnings.map(w => `<li>• ${w}</li>`).join('') : "";
+        document.getElementById('warning-modal').classList.remove('hidden');
+    }
+    function closeModal() { document.getElementById('warning-modal').classList.add('hidden'); }
+    function confirmCalculation() { if (pendingResultState) { renderResult(pendingResultState); closeModal(); } }
 
-    // Chạy khi tải trang
+    function selectProduct(id, pId, name) { 
+        // Kiểm tra trùng lặp sản phẩm
+        const isDuplicate = activeRows.some(rId => rId !== id && document.getElementById(`select-${rId}`).value === pId);
+        if (isDuplicate) {
+            showToast("Sản phẩm đã được chọn", `Bạn đã chọn "${name}" ở một dòng khác. Vui lòng kiểm tra lại để tránh tính toán nhầm!`);
+        }
+
+        document.getElementById(`select-${id}`).value = pId; 
+        document.getElementById(`search-${id}`).value = name; 
+        hideDropdown(id);
+        const p = DATABASE.find(x => x.id === pId);
+        document.getElementById(`spec-${id}`).innerHTML = `📦 Quy cách: ${p.boxesPerCarton} hộp/thùng`;
+        renderConfigs(id, pId); calcCartons(id); 
+    }
+    function renderConfigs(id, prodId) {
+        const container = document.getElementById(`config-${id}`);
+        const p = DATABASE.find(x => x.id === prodId);
+        container.innerHTML = PL_TYPES.map(plName => {
+            const cap = p.caps[plName] || 0;
+            const tid = `toggle-${id}-${plName.replace(' ', '-')}`;
+            return cap > 0 ? `
+                <div class="border rounded-lg p-2 w-[95px] flex flex-col items-center gap-1 bg-white shadow-sm" id="wrap-${tid}">
+                    <div class="flex justify-between w-full items-center">
+                        <span class="text-[10px] font-bold">${plName}</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="${tid}" class="sr-only mini-toggle" checked onchange="document.getElementById('wrap-${tid}').classList.toggle('opacity-40', !this.checked)">
+                            <span class="mini-label"></span>
+                        </label>
+                    </div>
+                    <span class="text-[9px] text-blue-600 font-bold">Sức chứa: ${cap}</span>
+                </div>` : `<div class="border rounded-lg p-2 w-[95px] opacity-20 bg-slate-100 flex flex-col items-center"><span class="text-[10px] font-bold">${plName}</span></div>`;
+        }).join('');
+    }
+    function calcCartons(id) { 
+        const pId = document.getElementById(`select-${id}`).value; 
+        const boxInput = document.getElementById(`boxes-${id}`).value;
+        if (!pId || boxInput === "") {
+            document.getElementById(`cartons-${id}`).value = "";
+            document.getElementById(`breakdown-${id}`).innerHTML = "";
+            return;
+        }
+        const boxes = parseInt(boxInput); 
+        if (isNaN(boxes)) return;
+        const p = DATABASE.find(x => x.id === pId); 
+        const full = Math.floor(boxes / p.boxesPerCarton); 
+        const rem = boxes % p.boxesPerCarton; 
+        document.getElementById(`cartons-${id}`).value = full + (rem > 0 ? 1 : 0); 
+        document.getElementById(`breakdown-${id}`).innerHTML = rem === 0 ? `= ${full} thùng` : `= ${full} th + 1 lẻ (${rem} hộp)`; 
+    }
+    function clearBoxes(id) { 
+        const cartonVal = document.getElementById(`cartons-${id}`).value;
+        if(cartonVal === "") {
+            document.getElementById(`boxes-${id}`).value = "";
+        }
+        document.getElementById(`breakdown-${id}`).innerHTML = ""; 
+    }
+    function filterProducts(id) { const kw = document.getElementById(`search-${id}`).value.toLowerCase(); const filtered = DATABASE.filter(p => p.name.toLowerCase().includes(kw)); const ul = document.getElementById(`dropdown-${id}`); ul.innerHTML = filtered.map(p => `<li onclick="selectProduct(${id},'${p.id}','${p.name}')" class="p-2 hover:bg-blue-50 cursor-pointer text-xs font-bold border-b last:border-0">${p.name}</li>`).join(""); ul.classList.toggle('hidden', filtered.length === 0); }
+    function hideDropdown(id) { document.getElementById(`dropdown-${id}`).classList.add('hidden'); }
+    function showDropdown(id) { activeRows.forEach(r => r!==id && hideDropdown(r)); document.getElementById(`dropdown-${id}`).classList.remove('hidden'); }
+    function removeRow(id) { if (activeRows.length > 1) { document.getElementById(`row-${id}`).remove(); activeRows = activeRows.filter(r => r !== id); updateRowLabels(); updateUIState(); } }
+    function updateRowLabels() { activeRows.forEach((rId, idx) => { document.querySelector(`#row-${rId} .row-label`).innerText = `Sản phẩm #${idx + 1}`; }); }
+    function moveRowUp(id) { const i = activeRows.indexOf(id); if (i > 0) { [activeRows[i-1], activeRows[i]] = [activeRows[i], activeRows[i-1]]; rebuildRows(); } }
+    function moveRowDown(id) { const i = activeRows.indexOf(id); if (i < activeRows.length - 1) { [activeRows[i], activeRows[i+1]] = [activeRows[i+1], activeRows[i]]; rebuildRows(); } }
+    function rebuildRows() { const c = document.getElementById('product-rows-container'); activeRows.forEach(id => c.appendChild(document.getElementById(`row-${id}`))); updateRowLabels(); }
+    function updateUIState() { document.getElementById('add-product-btn').style.display = activeRows.length >= MAX_ROWS ? 'none' : 'flex'; document.getElementById('max-item-warning').classList.toggle('hidden', activeRows.length < MAX_ROWS); }
+    function renderPalletBox(code, name, fill, max, idx) { const p = (fill/max)*100; return `<div class="flex flex-col items-center w-[86px]"><div class="text-[10px] font-black text-slate-400 mb-1">#${String(idx).padStart(2,'0')}</div><div class="pallet-box"><div class="pallet-icon-text">${name}</div><div class="pallet-fill" style="height:${p}%"></div></div><div class="pallet-base"><i></i><i></i><i></i></div><div class="mt-1 text-center w-full"><div class="text-[9px] font-black text-blue-800 bg-blue-50 border border-blue-200 rounded px-1 py-0.5 uppercase mb-1">${code}</div><div class="text-[11px] font-black text-slate-700">${fill}/${max}</div></div></div>`; }
+    
     init();
 </script>
 </body>
